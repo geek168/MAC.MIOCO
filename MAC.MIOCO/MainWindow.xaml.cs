@@ -30,7 +30,7 @@ namespace MAC.MIOCO
             InitializeComponent();
 
 
-
+     
             //SqlConnection conn = new SqlConnection(sqlconn);
             //conn.Open();
             //SqlCommand command = conn.CreateCommand();
