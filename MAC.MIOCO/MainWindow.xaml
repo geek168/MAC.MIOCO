@@ -1,0 +1,23 @@
+﻿<Window x:Class="MAC.MIOCO.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MAC.MIOCO"
+        ResizeMode="NoResize"
+        Background="BlanchedAlmond"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="MAC.MIOCO" Height="600" Width="800">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Label FontSize="30" Width="200">客户名称：</Label>
+            <Label x:Name="Name" FontSize="30"></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Label FontSize="15">请在右边文本框任意输入一段文字然后点“确定”</Label>
+            <TextBox x:Name="Input" Width="200" VerticalContentAlignment="Center"></TextBox>
+            <Button Content="确定" Width="50" Click="Button_Click"></Button>
+        </StackPanel>
+    </StackPanel>
+</Window>
