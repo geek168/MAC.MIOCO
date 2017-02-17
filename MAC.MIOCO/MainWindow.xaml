@@ -4,20 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MAC.MIOCO"
+        xmlns:w="clr-namespace:MAC.MIOCO"
         ResizeMode="NoResize"
         Background="BlanchedAlmond"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MAC.MIOCO" Height="600" Width="800">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <Label FontSize="30" Width="200">客户名称：</Label>
-            <Label x:Name="Name" FontSize="30"></Label>
+        Title="MAC.MIOCO" Height="700" Width="1000">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+            <TextBlock FontSize="40">MAC.MIOCO 管理系统</TextBlock>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <Label FontSize="15">请在右边文本框任意输入一段文字然后点“确定”</Label>
-            <TextBox x:Name="Input" Width="200" VerticalContentAlignment="Center"></TextBox>
-            <Button Content="确定" Width="50" Click="Button_Click"></Button>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <TextBlock FontSize="20" Width="80">账号：</TextBlock>
+            <TextBox Text="{Binding UserName, Mode=TwoWay}" FontSize="20" Width="300"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <TextBlock FontSize="20" Width="80">密码：</TextBlock>
+            <PasswordBox w:PasswordHelper.Attach="True" 
+                w:PasswordHelper.Password="{Binding Password, Mode=TwoWay}"
+                FontSize="20" Width="300"></PasswordBox>
+        </StackPanel>
+        <StackPanel>
+            <Button Command="{Binding ClickCommand}" Width="100" FontSize="20" Background="LightBlue">登录</Button>
         </StackPanel>
     </StackPanel>
 </Window>
