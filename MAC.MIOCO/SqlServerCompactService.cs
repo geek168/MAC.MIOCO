@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MAC.MIOCO
 {
@@ -23,13 +24,15 @@ namespace MAC.MIOCO
 
         public static DataTable GetData(string tableName)
         {
+            //MessageBox.Show(SQLCONN);
+
             DataTable dt = new DataTable();
             var sql = "SELECT * FROM " + tableName;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
                 conn.Open();
                 SqlCeCommand command = new SqlCeCommand(sql, conn);
-                using (SqlCeDataReader dataReader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                using (SqlCeDataReader dataReader = command.ExecuteReader())
                 {
                     dt.Load(dataReader);
                 }

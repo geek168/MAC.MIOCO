@@ -65,6 +65,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resource\Webalys-Kameleon.pics-Shop.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -150,13 +153,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resource\Shop.png" />
+    <Resource Include="Resource\Webalys-Kameleon.pics-Shop.ico" />
     <Content Include="Data\MIOCO.sdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="Resource\" />
     <Folder Include="View\" />
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@
         Title="MAC.MIOCO" Height="700" Width="1000">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+            <Image Source="Resource/Shop.png" Width="120" Height="120"></Image>
             <TextBlock FontSize="40">MAC.MIOCO 管理系统</TextBlock>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10">
