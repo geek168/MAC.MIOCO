@@ -16,7 +16,19 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock FontSize="20" Width="80">账号：</TextBlock>
-            <TextBox Text="{Binding UserName, Mode=TwoWay}" FontSize="20" Width="300"></TextBox>
+            <TextBox Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Width="300">
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- Placeholder for the TextBox itself -->
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder x:Name="textBox"/>
+                            </Border>
+                            <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" VerticalAlignment="Center" Margin="5 0 0 0 "/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock FontSize="20" Width="80">密码：</TextBlock>

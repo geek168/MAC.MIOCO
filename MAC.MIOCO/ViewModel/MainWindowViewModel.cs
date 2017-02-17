@@ -1,6 +1,7 @@
 ﻿using MAC.MIOCO.Command;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Windows;
 
 namespace MAC.MIOCO.ViewModel
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IDataErrorInfo
     {
         private string _UserName;
         public string UserName
@@ -43,7 +44,7 @@ namespace MAC.MIOCO.ViewModel
                               select user;
             if (useraccount.ToList().Count == 0)
             {
-                
+                UserName = "Error";
             }
         }
 
@@ -67,6 +68,40 @@ namespace MAC.MIOCO.ViewModel
             ClickCommand = new DelegateCommand(Execute, CanExecute);
         }
 
+
+        #region IDataErrorInfo
+
+        public string Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                var ret = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(UserName):
+                        if (UserName == "Error")
+                        {
+                            ret = " * 账号密码错误！！！";
+                            UserName = "";
+                            Password = "";
+                        }
+                        break;
+                }
+
+                return ret;
+            }
+        }
+
+        #endregion
 
     }
 }
