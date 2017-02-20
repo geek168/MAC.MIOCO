@@ -1,4 +1,5 @@
 ﻿using MAC.MIOCO.Command;
+using MAC.MIOCO.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,6 +46,15 @@ namespace MAC.MIOCO.ViewModel
             if (useraccount.ToList().Count == 0)
             {
                 UserName = "Error";
+            }
+            else
+            {
+                SalesWindow window = new SalesWindow();
+                SalesWindowViewModel model = new SalesWindowViewModel(window);
+                model.AfterLogoutHandler += (s, e) => { UserName = ""; Password = ""; };
+                window.DataContext = model;
+                window.Owner = Application.Current.MainWindow;
+                window.ShowDialog();
             }
         }
 

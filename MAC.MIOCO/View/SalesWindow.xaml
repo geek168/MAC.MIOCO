@@ -1,0 +1,48 @@
+﻿<Window x:Class="MAC.MIOCO.View.SalesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MAC.MIOCO.View"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource ChildWindowStyle}"
+        Title="SalesWindow" Height="700" Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Background="Azure" Margin="3" Command="{Binding CloseCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">关闭</TextBlock>
+                    <Image Source="../Resource/Delete.png" Height="22" Width="22"></Image>
+                </StackPanel>
+            </Button>
+            <Button Background="Azure" Margin="3" Command="{Binding LogoutCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">注销</TextBlock>
+                    <Image Source="../Resource/Logout.png" Height="25" Width="25"></Image>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <GroupBox Grid.Row="1" BorderBrush="Black" Style="{StaticResource GroupBoxStyle}" Background="Azure">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
+                    <TextBlock>货品编号：</TextBlock>
+                    <TextBox Width="200"></TextBox>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
