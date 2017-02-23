@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MAC.MIOCO.View"
         xmlns:vc="clr-namespace:MAC.MIOCO.Converters"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         Style="{StaticResource ChildWindowStyle}"
         Title="SalesWindow" Height="700" Width="1000">
     <Window.Resources>
