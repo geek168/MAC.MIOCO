@@ -96,6 +96,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
+    <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
+    <Compile Include="Converters\ItemSizeConverter.cs" />
+    <Compile Include="Model\ItemMaster.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="SqlServerCompactService.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -165,6 +168,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resource\Computer.png" />
     <Resource Include="Resource\Delete.png" />
     <Resource Include="Resource\Logout.png" />
     <Resource Include="Resource\Shop.png" />
@@ -173,9 +177,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>

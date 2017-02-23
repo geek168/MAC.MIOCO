@@ -41,7 +41,7 @@
             </PasswordBox>
         </StackPanel>
         <StackPanel>
-            <Button Command="{Binding ClickCommand}" Width="100" FontSize="20" Background="LightBlue">登录</Button>
+            <Button Command="{Binding ClickCommand}" Width="100" FontSize="20" Background="LightBlue" IsDefault="True">登录</Button>
         </StackPanel>
     </StackPanel>
 </Window>
