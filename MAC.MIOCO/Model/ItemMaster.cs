@@ -20,6 +20,8 @@ namespace MAC.MIOCO.Model
 
         public int SalesCount { get; set; }
 
-        public double StockPrice { get; set; }
+        public decimal StockPrice { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

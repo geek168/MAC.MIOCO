@@ -77,6 +77,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -97,7 +98,6 @@
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
-    <Compile Include="Converters\ItemSizeConverter.cs" />
     <Compile Include="Model\ItemMaster.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="SqlServerCompactService.cs" />

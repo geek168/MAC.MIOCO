@@ -33,8 +33,7 @@ namespace MAC.MIOCO.Command
         /// 
         /// </summary>
         /// <param name="methodToExecute"></param>
-        public DelegateCommand(Action methodToExecute)
-            : this(methodToExecute, null)
+        public DelegateCommand(Action methodToExecute) : this(methodToExecute, null)
         {
         }
 
@@ -56,5 +55,47 @@ namespace MAC.MIOCO.Command
             methodToExecute.Invoke();
         }
 
+    }
+
+
+    public class DelegateCommand<T> : ICommand
+    {
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        private Func<bool> canExecuteEvaluator;
+        private Action<T> methodToExecuteGeneric;
+
+        public DelegateCommand(Action<T> methodToExecute, Func<bool> canExecuteEvaluator)
+        {
+            this.methodToExecuteGeneric = methodToExecute;
+            this.canExecuteEvaluator = canExecuteEvaluator;
+        }
+
+        public DelegateCommand(Action<T> methodToExecute) : this(methodToExecute, null)
+        {
+
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            if (canExecuteEvaluator == null)
+            {
+                return true;
+            }
+            else
+            {
+                bool result = canExecuteEvaluator.Invoke();
+                return result;
+            }
+        }
+
+        public void Execute(object parameter)
+        {
+            methodToExecuteGeneric.Invoke((T)parameter);
+        }
     }
 }
