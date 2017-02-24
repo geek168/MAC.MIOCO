@@ -109,7 +109,7 @@ namespace MAC.MIOCO.ViewModel
                 message.Append("本次共计售出：" + Count + "件，赚得：" + (SoldPirce - (StockPrice * Count)) + "元！");
                 message.Append(Environment.NewLine);
                 message.Append("是否确认售出？");
-                if (MessageBox.Show(message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                if (MessageBox.Show(window ,message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
                 {
                     var ss = 0;
                 }
