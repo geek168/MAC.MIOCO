@@ -10,6 +10,7 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="MAC.MIOCO" Height="700" Width="1000">
+    <!--上衣，裤子，连衣裙，半裙，鞋子，配饰，袜子，内裤，内衣-->
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
             <Image Source="Resource/Shop.png" Width="120" Height="120"></Image>
