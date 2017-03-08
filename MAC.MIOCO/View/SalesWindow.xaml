@@ -12,6 +12,7 @@
         Title="SalesWindow" Height="700" Width="1000">
     <Window.Resources>
         <vc:EnumMatchToBooleanConverter x:Key="enumConverter"></vc:EnumMatchToBooleanConverter>
+        <vc:ItemTypeConverter x:Key="itemtypeConverter"></vc:ItemTypeConverter>
     </Window.Resources>
     <Grid>
 
@@ -35,7 +36,7 @@
         <!--#region Header-->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
@@ -43,6 +44,12 @@
                 <TextBlock Foreground="DarkBlue" Text="{Binding SalesDate, Mode=TwoWay}" FontSize="20"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Margin="3" Command="{Binding SystemCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">今日销售统计</TextBlock>
+                        <Image Source="../Resource/Sales.png" Height="22" Width="22"></Image>
+                    </StackPanel>
+                </Button>
                 <Button Margin="3" Command="{Binding SystemCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">系统功能</TextBlock>
@@ -106,6 +113,10 @@
                          IsChecked="{Binding Path=CurrentOption, Mode=TwoWay, Converter={StaticResource enumConverter},ConverterParameter=15}"  />
                 </StackPanel>-->
                 <TextBox Text="{Binding ItemSize}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Height="30">
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">款式：</TextBlock>
+                <TextBox Text="{Binding ItemType,Converter={StaticResource itemtypeConverter}}" IsReadOnly="True" Background="LightGray" Width="150" VerticalContentAlignment="Center"></TextBox>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">数量：</TextBlock>
@@ -175,10 +186,17 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="商品名称" Width="*" MinWidth="250" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="商品名称" Width="*" MinWidth="200" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding ItemName}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="款式" Width="50" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ItemType, Converter={StaticResource itemtypeConverter}}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

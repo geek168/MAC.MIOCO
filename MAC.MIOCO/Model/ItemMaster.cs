@@ -16,6 +16,8 @@ namespace MAC.MIOCO.Model
 
         public int ItemSize { get; set; }
 
+        public int ItemType { get; set; }
+
         public int StockCount { get; set; }
 
         public int SalesCount { get; set; }

@@ -98,7 +98,10 @@
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
+    <Compile Include="Converters\ItemTypeConverter.cs" />
+    <Compile Include="ExForCastDataToObject.cs" />
     <Compile Include="Model\ItemMaster.cs" />
+    <Compile Include="Model\ItemTypeModel.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="SqlServerCompactService.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -168,6 +171,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resource\Sales.png" />
     <Resource Include="Resource\Computer.png" />
     <Resource Include="Resource\Delete.png" />
     <Resource Include="Resource\Logout.png" />

@@ -13,5 +13,6 @@ namespace MAC.MIOCO
     /// </summary>
     public partial class App : Application
     {
+        
     }
 }
