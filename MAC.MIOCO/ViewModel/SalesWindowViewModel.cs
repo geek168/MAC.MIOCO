@@ -1,6 +1,7 @@
 ﻿using MAC.MIOCO;
 using MAC.MIOCO.Command;
 using MAC.MIOCO.Model;
+using MAC.MIOCO.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -114,6 +115,15 @@ namespace MAC.MIOCO.ViewModel
                 ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
 
+            SalesItemCommand = new DelegateCommand(() =>
+            {
+                SalesItemWindow w = new SalesItemWindow();
+                SalesItemViewModel model = new SalesItemViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
+            });
+
             SoldCommand = new DelegateCommand(() =>
             {
                 StringBuilder message = new StringBuilder();
@@ -166,6 +176,8 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand NextCommand { get; private set; }
 
         public DelegateCommand SoldCommand { get; private set; }
+
+        public DelegateCommand SalesItemCommand { get; private set; }
 
         Window WINDOW;
         public event EventHandler AfterLogoutHandler;

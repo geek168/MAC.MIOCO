@@ -44,9 +44,9 @@
                 <TextBlock Foreground="DarkBlue" Text="{Binding SalesDate, Mode=TwoWay}" FontSize="20"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Margin="3" Command="{Binding SystemCommand}">
+                <Button Margin="3" Command="{Binding SalesItemCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">今日销售统计</TextBlock>
+                        <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">销售统计</TextBlock>
                         <Image Source="../Resource/Sales.png" Height="22" Width="22"></Image>
                     </StackPanel>
                 </Button>
@@ -196,9 +196,14 @@
                     <DataGridTemplateColumn Header="款式" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ItemType, Converter={StaticResource itemtypeConverter}}"></TextBlock>
+                                <TextBlock Text="{Binding ItemType, Converter={StaticResource itemtypeConverter}}" HorizontalAlignment="Center"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="尺码" Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>

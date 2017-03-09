@@ -1,0 +1,150 @@
+﻿<Window x:Class="MAC.MIOCO.View.SalesItemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vc="clr-namespace:MAC.MIOCO.Converters"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:MAC.MIOCO.View"
+        mc:Ignorable="d"
+        Style="{StaticResource ChildWindowStyle}"
+        WindowStartupLocation="CenterOwner"
+        Title="SalesItemWindow" Height="700" Width="1000">
+    <Window.Resources>
+        <vc:EnumMatchToBooleanConverter x:Key="enumConverter"></vc:EnumMatchToBooleanConverter>
+        <vc:ItemTypeConverter x:Key="itemtypeConverter"></vc:ItemTypeConverter>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Purple">销售统计</TextBlock>
+            <Button Margin="3" Width="100" Height="30" Grid.Column="1" HorizontalAlignment="Right"
+                    Command="{Binding CloseCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">返回</TextBlock>
+                    <Image Source="../Resource/Return.png" Height="22" Width="22"></Image>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Calendar VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 5 0 0"></Calendar>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按日统计</Button>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按月统计</Button>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按年统计</Button>
+            <StackPanel Margin="5 30 5 0">
+                <TextBlock FontSize="18">总计：</TextBlock>
+                <DockPanel Margin="0 5 0 0">
+                    <TextBlock DockPanel.Dock="Left" FontSize="14" Width="30">卖出</TextBlock>
+                    <TextBlock DockPanel.Dock="Right" FontSize="14">件</TextBlock>
+                    <TextBlock Text="{Binding TotalCount}"
+                        FontSize="14" Foreground="Red" HorizontalAlignment="Right" Margin="0 0 5 0"></TextBlock>
+                </DockPanel>
+                <DockPanel Margin="0 5 0 0">
+                    <TextBlock DockPanel.Dock="Left" FontSize="14" Width="30">利润</TextBlock>
+                    <TextBlock DockPanel.Dock="Right" FontSize="14">元</TextBlock>
+                    <TextBlock Text="{Binding TotalProfit}"
+                        FontSize="14" Foreground="Red" HorizontalAlignment="Right" Margin="0 0 5 0"></TextBlock>
+                </DockPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Row="0" Margin="5" ItemsSource="{Binding ItemSalesColletion}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
+                      RowHeight="27" Height="602" CellStyle="{StaticResource Body_Content_DataGrid_Centering_Default}"  SelectionMode="Single"
+                      VerticalAlignment="Top" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" CanUserReorderColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="商品编号" Width="180" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ItemId}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="商品名称" Width="*" MinWidth="200" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ItemName}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="款式" Width="50" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ItemType, Converter={StaticResource itemtypeConverter}}" HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="客户" Width="60" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CustomerName}" HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="进货价格" Width="100" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StockPrice}" HorizontalAlignment="Right"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="最终售价" Width="100" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SoldPirce}" HorizontalAlignment="Right"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="销售时间" Width="120" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SoldTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="1" Margin="5">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Command="{Binding PreviousCommand}" CommandParameter="Previous" Width="100" FontSize="14" Height="25" Margin="2">上一页</Button>
+                    <Button Command="{Binding NextCommand}" CommandParameter="Next" Width="100" FontSize="14" Height="25" Margin="2">下一页</Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
