@@ -124,6 +124,15 @@ namespace MAC.MIOCO.ViewModel
                 w.ShowDialog();
             });
 
+            VoidCommand = new DelegateCommand(() =>
+            {
+                VoidWindow w = new VoidWindow();
+                VoidWindowViewModel model = new VoidWindowViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
+            });
+
             SoldCommand = new DelegateCommand(() =>
             {
                 StringBuilder message = new StringBuilder();
@@ -178,6 +187,8 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand SoldCommand { get; private set; }
 
         public DelegateCommand SalesItemCommand { get; private set; }
+
+        public DelegateCommand VoidCommand { get; private set; }
 
         Window WINDOW;
         public event EventHandler AfterLogoutHandler;

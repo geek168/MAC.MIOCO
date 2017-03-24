@@ -16,6 +16,8 @@ namespace MAC.MIOCO.Model
 
         public int ItemType { get; set; }
 
+        public int SalesType { get; set; }
+
         public string CustomerId { get; set; }
 
         public string CustomerName { get; set; }

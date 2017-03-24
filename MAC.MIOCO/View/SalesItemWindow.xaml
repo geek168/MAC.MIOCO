@@ -13,6 +13,8 @@
     <Window.Resources>
         <vc:EnumMatchToBooleanConverter x:Key="enumConverter"></vc:EnumMatchToBooleanConverter>
         <vc:ItemTypeConverter x:Key="itemtypeConverter"></vc:ItemTypeConverter>
+        <vc:SalesTypeConverter x:Key="salesTypeConverter"></vc:SalesTypeConverter>
+        <vc:ItemSalesForegroundConverter x:Key="itemSalesForegroundConverter"></vc:ItemSalesForegroundConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -82,7 +84,16 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="款式" Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="销售类型" Width="80" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SalesType, Converter={StaticResource salesTypeConverter}}" 
+                                           Foreground="{Binding SalesType, Converter={StaticResource itemSalesForegroundConverter}}"
+                                           HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="款式" Width="55" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding ItemType, Converter={StaticResource itemtypeConverter}}" HorizontalAlignment="Center"></TextBlock>
@@ -121,7 +132,9 @@
                     <DataGridTemplateColumn Header="最终售价" Width="100" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding SoldPirce}" HorizontalAlignment="Right"></TextBlock>
+                                <TextBlock Text="{Binding SoldPirce}" 
+                                           Foreground="{Binding SalesType, Converter={StaticResource itemSalesForegroundConverter}}"
+                                           HorizontalAlignment="Right"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
