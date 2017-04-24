@@ -25,5 +25,7 @@ namespace MAC.MIOCO.Model
         public decimal StockPrice { get; set; }
 
         public decimal Price { get; set; }
+
+        public DateTime UpdateTime { get; set; }
     }
 }

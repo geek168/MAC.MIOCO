@@ -3,7 +3,9 @@ using MAC.MIOCO.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +34,28 @@ namespace MAC.MIOCO.ViewModel
             {
                 _Password = value;
                 OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        private Visibility _LoginVisibility = Visibility.Visible;
+        public Visibility LoginVisibility
+        {
+            get { return _LoginVisibility; }
+            set
+            {
+                _LoginVisibility = value;
+                OnPropertyChanged(nameof(LoginVisibility));
+            }
+        }
+
+        private Visibility _LoginErrorVisibility = Visibility.Collapsed;
+        public Visibility LoginErrorVisibility
+        {
+            get { return _LoginErrorVisibility; }
+            set
+            {
+                _LoginErrorVisibility = value;
+                OnPropertyChanged(nameof(LoginErrorVisibility));
             }
         }
 
@@ -76,6 +100,24 @@ namespace MAC.MIOCO.ViewModel
         public MainWindowViewModel()
         {
             ClickCommand = new DelegateCommand(Execute, CanExecute);
+
+            var relativepath = ConfigurationManager.ConnectionStrings["FilePath"].ConnectionString;
+            var backuprelativepath = ConfigurationManager.ConnectionStrings["BackupFilePath"].ConnectionString;
+            var path = Path.Combine(Environment.CurrentDirectory, "Data");
+            var backuppath = Path.Combine(Environment.CurrentDirectory, "BackupData");
+            var file = relativepath.Replace("|DataDirectory|", path);
+            var backupfile = relativepath.Replace("|DataDirectory|", backuppath);
+            if (!File.Exists(file))
+            {
+                LoginVisibility = Visibility.Collapsed;
+                LoginErrorVisibility = Visibility.Visible;
+            }
+            else
+            {
+                File.Copy(file, backupfile, true);
+                LoginVisibility = Visibility.Visible;
+                LoginErrorVisibility = Visibility.Collapsed;
+            }
         }
 
 

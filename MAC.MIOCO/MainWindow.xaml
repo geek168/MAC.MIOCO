@@ -42,7 +42,10 @@
             </PasswordBox>
         </StackPanel>
         <StackPanel>
-            <Button Command="{Binding ClickCommand}" Width="100" FontSize="20" Background="LightBlue" IsDefault="True">登录</Button>
+            <Button Command="{Binding ClickCommand}" Visibility="{Binding LoginVisibility}"
+                    Width="100" FontSize="20" Background="LightBlue" IsDefault="True">登录</Button>
+            <TextBlock Visibility="{Binding LoginErrorVisibility}"
+                FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Red">数据文件损坏</TextBlock>
         </StackPanel>
     </StackPanel>
 </Window>

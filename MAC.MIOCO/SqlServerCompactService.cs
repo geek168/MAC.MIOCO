@@ -25,8 +25,6 @@ namespace MAC.MIOCO
 
         public static DataTable GetData(string tableName)
         {
-            //MessageBox.Show(SQLCONN);
-
             DataTable dt = new DataTable();
             var sql = "SELECT * FROM " + tableName;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
@@ -40,6 +38,19 @@ namespace MAC.MIOCO
                 conn.Close();
             }
             return dt;
+        }
+
+        public static bool Insert(string sql)
+        {
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
         }
 
     }

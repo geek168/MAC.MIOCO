@@ -124,6 +124,15 @@ namespace MAC.MIOCO.ViewModel
                 w.ShowDialog();
             });
 
+            StockCommand = new DelegateCommand(() =>
+            {
+                StockWindow w = new StockWindow();
+                StockViewModel model = new StockViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
+            });
+
             VoidCommand = new DelegateCommand(() =>
             {
                 VoidWindow w = new VoidWindow();
@@ -187,6 +196,8 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand SoldCommand { get; private set; }
 
         public DelegateCommand SalesItemCommand { get; private set; }
+
+        public DelegateCommand StockCommand { get; private set; }
 
         public DelegateCommand VoidCommand { get; private set; }
 
