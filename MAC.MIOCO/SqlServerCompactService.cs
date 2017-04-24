@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Data.SqlServerCe;
 using System.IO;
 using System.Linq;
@@ -47,6 +48,73 @@ namespace MAC.MIOCO
             {
                 conn.Open();
                 SqlCeCommand command = new SqlCeCommand(sql, conn);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
+        }
+
+        public static bool InsertItemMaster(ItemMaster item)
+        {
+            var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,SalesCount,StockPrice,Price,Id,UpdateTime)
+                        VALUES (@ItemId,@ItemName,@ItemSize,@ItemType,@StockCount,@SalesCount,@StockPrice,@Price,@Id,@UpdateTime)";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[] 
+                {
+                    new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
+                    new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
+                    new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
+                    new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
+                    new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
+                    new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
+                    new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
+                    new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
+                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                };
+                command.Parameters.AddRange(parameters);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
+        }
+
+        public static bool UpdateItemMaster(ItemMaster item)
+        {
+            var sql = @"UPDATE ItemMaster 
+                        SET ItemId = @ItemId
+                           ,ItemName = @ItemName
+                           ,ItemSize = @ItemSize
+                           ,ItemType = @ItemType
+                           ,StockCount = @StockCount
+                           ,SalesCount = @SalesCount
+                           ,StockPrice = @StockPrice
+                           ,Price = @Price
+                           ,UpdateTime = @UpdateTime
+                        WHERE Id = @Id";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
+                    new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
+                    new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
+                    new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
+                    new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
+                    new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
+                    new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
+                    new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
+                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                };
+                command.Parameters.AddRange(parameters);
                 ret = command.ExecuteNonQuery() > 0;
                 conn.Close();
             }

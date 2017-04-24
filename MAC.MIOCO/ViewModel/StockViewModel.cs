@@ -13,11 +13,8 @@ namespace MAC.MIOCO.ViewModel
 {
     public class StockViewModel : ViewModelBase, IDataErrorInfo
     {
-        public DelegateCommand CloseCommand { get; private set; }
 
-        public DelegateCommand InsertCommand { get; private set; }
-
-        public DelegateCommand UpdateCommand { get; private set; }
+        private string Id;
 
         /// <summary>
         /// 
@@ -29,6 +26,8 @@ namespace MAC.MIOCO.ViewModel
             ItemType = ItemTypeCollection.FirstOrDefault();
             InsertCommandVisibility = Visibility.Visible;
             UpdateCommandVisibility = Visibility.Collapsed;
+
+            BindData();
 
             CloseCommand = new DelegateCommand(() =>
             {
@@ -50,19 +49,82 @@ namespace MAC.MIOCO.ViewModel
                     UpdateTime = DateTime.Now
                 };
 
-                var sql = @"INSERT INTO [ItemMaster]([ItemId],[ItemName],[ItemSize],[ItemType],[StockCount],[SalesCount],[StockPrice],[Price],[Id],[UpdateTime])
-                            VALUES
-                            ('" + item.ItemId + "','" + item.ItemName + "'," + item.ItemSize + "," + item.ItemType + "," + item.StockCount + ",0," + item.StockPrice + "," + item.Price + ",'" + item.Id + "','" + item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") + "'); ";
-                if(SqlServerCompactService.Insert(sql))
+                if (SqlServerCompactService.InsertItemMaster(item))
                 {
                     InitialControlValue();
+                    BindData();
                 }
 
             }, CanExcute);
 
             UpdateCommand = new DelegateCommand(() =>
             {
+                var item = new ItemMaster()
+                {
+                    Id = Id,
+                    ItemId = ItemId,
+                    ItemName = ItemName,
+                    ItemSize = int.Parse(ItemSize),
+                    ItemType = ItemType.Type,
+                    StockCount = Count,
+                    StockPrice = decimal.Parse(StockPrice),
+                    Price = decimal.Parse(Price),
+                    UpdateTime = DateTime.Now
+                };
+
+
+                if (SqlServerCompactService.UpdateItemMaster(item))
+                {
+                    InitialControlValue();
+                    BindData();
+                    InsertCommandVisibility = Visibility.Visible;
+                    UpdateCommandVisibility = Visibility.Collapsed;
+                }
+
             }, CanExcute);
+
+            PreviousCommand = new DelegateCommand(() =>
+            {
+                PageIndex--;
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return PageIndex > 0 ? true : false; });
+
+            NextCommand = new DelegateCommand(() =>
+            {
+                PageIndex++;
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return (PageIndex + 1) * PAGESIZE < SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Count() ? true : false; });
+
+            SearchCommand = new DelegateCommand(() =>
+            {
+                var s = SOURCE.Where(t => t.ItemId.Contains(SearchItemId));
+                PageIndex = 0;
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(s.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
+
+            AllCommand = new DelegateCommand(() =>
+            {
+                SearchItemId = "";
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
+
+            SelectCommand = new DelegateCommand<ItemMaster>(s =>
+            {
+                if (s != null)
+                {
+                    InsertCommandVisibility = Visibility.Collapsed;
+                    UpdateCommandVisibility = Visibility.Visible;
+
+                    Id = s.Id;
+                    ItemId = s.ItemId;
+                    ItemName = s.ItemName;
+                    ItemSize = s.ItemSize.ToString();
+                    ItemType = ItemTypeCollection.FirstOrDefault(t=>t.Type == s.ItemType);
+                    StockPrice = s.StockPrice.ToString();
+                    Price = s.Price.ToString();
+                    Count = s.StockCount;
+                }
+            });
         }
 
         private bool CanExcute()
@@ -85,10 +147,33 @@ namespace MAC.MIOCO.ViewModel
             ItemId = "";
             ItemName = "";
             ItemSize = "";
-            Count = 0;
+            Count = 1;
             StockPrice = "";
             Price = "";
         }
+
+        private void BindData()
+        {
+            SOURCE = new ObservableCollection<ItemMaster>(SqlServerCompactService.GetData("ItemMaster").Cast<ItemMaster>());
+            SOURCE = new ObservableCollection<ItemMaster>(SOURCE.OrderByDescending(s => s.UpdateTime));
+            ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+        }
+
+        public DelegateCommand CloseCommand { get; private set; }
+
+        public DelegateCommand InsertCommand { get; private set; }
+
+        public DelegateCommand UpdateCommand { get; private set; }
+
+        public DelegateCommand<ItemMaster> SelectCommand { get; private set; }
+
+        public DelegateCommand SearchCommand { get; private set; }
+
+        public DelegateCommand AllCommand { get; private set; }
+
+        public DelegateCommand PreviousCommand { get; private set; }
+
+        public DelegateCommand NextCommand { get; private set; }
 
         private Visibility _InsertCommandVisibility = Visibility.Visible;
         public Visibility InsertCommandVisibility
@@ -167,7 +252,7 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
-        public int _Count;
+        public int _Count = 1;
         public int Count
         {
             get { return _Count; }
@@ -200,6 +285,43 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
+        private int PAGESIZE = 14;
+        private int _PageIndex = 0;
+        public int PageIndex
+        {
+            get { return _PageIndex; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _PageIndex = value;
+                }
+            }
+        }
+
+        private ObservableCollection<ItemMaster> _ItemMasterColletion;
+        public ObservableCollection<ItemMaster> ItemMasterColletion
+        {
+            get { return _ItemMasterColletion; }
+            set
+            {
+                _ItemMasterColletion = value;
+                OnPropertyChanged(nameof(ItemMasterColletion));
+            }
+        }
+
+        private ObservableCollection<ItemMaster> SOURCE = new ObservableCollection<ItemMaster>();
+
+        private string _SearchItemId = "";
+        public string SearchItemId
+        {
+            get { return _SearchItemId; }
+            set
+            {
+                _SearchItemId = value;
+                OnPropertyChanged(nameof(SearchItemId));
+            }
+        }
 
         #region IDataErrorInfo
 
