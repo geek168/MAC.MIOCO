@@ -274,7 +274,7 @@
                                 </Button>-->
                                 <Button  Style="{StaticResource HyperlinkLikeButton}" Width="80"
                                          Command="{Binding Path=DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" 
-                                         CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}">
+                                         CommandParameter="{Binding}">
                                     <TextBlock TextDecorations="Underline" HorizontalAlignment="Center">删除</TextBlock>
                                 </Button>
                             </DataTemplate>
