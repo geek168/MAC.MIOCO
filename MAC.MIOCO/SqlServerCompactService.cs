@@ -56,8 +56,8 @@ namespace MAC.MIOCO
 
         public static bool InsertItemMaster(ItemMaster item)
         {
-            var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,SalesCount,StockPrice,Price,Id,UpdateTime)
-                        VALUES (@ItemId,@ItemName,@ItemSize,@ItemType,@StockCount,@SalesCount,@StockPrice,@Price,@Id,@UpdateTime)";
+            var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,SalesCount,StockPrice,Price,Id,UpdateTime,Color)
+                        VALUES (@ItemId,@ItemName,@ItemSize,@ItemType,@StockCount,@SalesCount,@StockPrice,@Price,@Id,@UpdateTime,@Color)";
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
@@ -74,7 +74,8 @@ namespace MAC.MIOCO
                     new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
                     new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
                     new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
                 };
                 command.Parameters.AddRange(parameters);
                 ret = command.ExecuteNonQuery() > 0;
@@ -95,6 +96,7 @@ namespace MAC.MIOCO
                            ,StockPrice = @StockPrice
                            ,Price = @Price
                            ,UpdateTime = @UpdateTime
+                           ,Color = @Color
                         WHERE Id = @Id";
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
@@ -112,7 +114,27 @@ namespace MAC.MIOCO
                     new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
                     new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
                     new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
+                };
+                command.Parameters.AddRange(parameters);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
+        }
+
+        public static bool DeleteItemMaster(ItemMaster item)
+        {
+            var sql = @"DELETE FROM ItemMaster WHERE Id = @Id";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
                 };
                 command.Parameters.AddRange(parameters);
                 ret = command.ExecuteNonQuery() > 0;

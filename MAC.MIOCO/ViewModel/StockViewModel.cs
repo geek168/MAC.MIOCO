@@ -15,6 +15,7 @@ namespace MAC.MIOCO.ViewModel
     {
 
         private string Id;
+        private bool IsRepeat = false;
 
         /// <summary>
         /// 
@@ -46,7 +47,8 @@ namespace MAC.MIOCO.ViewModel
                     StockCount = Count,
                     StockPrice = decimal.Parse(StockPrice),
                     Price = decimal.Parse(Price),
-                    UpdateTime = DateTime.Now
+                    UpdateTime = DateTime.Now,
+                    Color = Color
                 };
 
                 if (SqlServerCompactService.InsertItemMaster(item))
@@ -69,7 +71,8 @@ namespace MAC.MIOCO.ViewModel
                     StockCount = Count,
                     StockPrice = decimal.Parse(StockPrice),
                     Price = decimal.Parse(Price),
-                    UpdateTime = DateTime.Now
+                    UpdateTime = DateTime.Now,
+                    Color = Color
                 };
 
 
@@ -82,6 +85,11 @@ namespace MAC.MIOCO.ViewModel
                 }
 
             }, CanExcute);
+
+            ClearCommand = new DelegateCommand(() =>
+            {
+                InitialControlValue();
+            });
 
             PreviousCommand = new DelegateCommand(() =>
             {
@@ -123,6 +131,22 @@ namespace MAC.MIOCO.ViewModel
                     StockPrice = s.StockPrice.ToString();
                     Price = s.Price.ToString();
                     Count = s.StockCount;
+                    Color = s.Color;
+
+                    IsRepeat = false;
+                }
+            });
+
+            DeleteCommand = new DelegateCommand<ItemMaster>(s =>
+            {
+                if (s != null)
+                {
+                    if (MessageBox.Show(window, "是否确认删除该货品？", "确认删除点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                    {
+                        SqlServerCompactService.DeleteItemMaster(s);
+                        BindData();
+                        InitialControlValue();
+                    }
                 }
             });
         }
@@ -150,6 +174,8 @@ namespace MAC.MIOCO.ViewModel
             Count = 1;
             StockPrice = "";
             Price = "";
+            Color = "";
+            ItemType = ItemTypeCollection.FirstOrDefault();
         }
 
         private void BindData()
@@ -165,7 +191,11 @@ namespace MAC.MIOCO.ViewModel
 
         public DelegateCommand UpdateCommand { get; private set; }
 
+        public DelegateCommand ClearCommand { get; private set; }
+
         public DelegateCommand<ItemMaster> SelectCommand { get; private set; }
+
+        public DelegateCommand<ItemMaster> DeleteCommand { get; private set; }
 
         public DelegateCommand SearchCommand { get; private set; }
 
@@ -205,6 +235,15 @@ namespace MAC.MIOCO.ViewModel
             {
                 _ItemId = value;
                 OnPropertyChanged(nameof(ItemId));
+
+                if (SOURCE.FirstOrDefault(s => string.Compare(s.ItemId, value, true) == 0) != null)
+                {
+                    IsRepeat = true;
+                }
+                else
+                {
+                    IsRepeat = false;
+                }
             }
         }
 
@@ -285,6 +324,17 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
+        public string _Color;
+        public string Color
+        {
+            get { return _Color; }
+            set
+            {
+                _Color = value;
+                OnPropertyChanged(nameof(Color));
+            }
+        }
+
         private int PAGESIZE = 14;
         private int _PageIndex = 0;
         public int PageIndex
@@ -342,6 +392,12 @@ namespace MAC.MIOCO.ViewModel
                 decimal j = 0;
                 switch (columnName)
                 {
+                    case nameof(ItemId):
+                        if(IsRepeat)
+                        {
+                            ret = " * 商品编号重复请检查！！！";
+                        }
+                        break;
                     case nameof(ItemSize):
                         if (!string.IsNullOrEmpty(ItemSize) && !int.TryParse(ItemSize, out i))
                         {
