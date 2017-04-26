@@ -94,18 +94,18 @@ namespace MAC.MIOCO.ViewModel
             PreviousCommand = new DelegateCommand(() =>
             {
                 PageIndex--;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.IndexOf(SearchItemId, StringComparison.OrdinalIgnoreCase) >= 0).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             }, () => { return PageIndex > 0 ? true : false; });
 
             NextCommand = new DelegateCommand(() =>
             {
                 PageIndex++;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
-            }, () => { return (PageIndex + 1) * PAGESIZE < SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Count() ? true : false; });
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.IndexOf(SearchItemId, StringComparison.OrdinalIgnoreCase) >= 0).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return (PageIndex + 1) * PAGESIZE < SOURCE.Where(t => t.ItemId.IndexOf(SearchItemId, StringComparison.OrdinalIgnoreCase) >= 0).Count() ? true : false; });
 
             SearchCommand = new DelegateCommand(() =>
             {
-                var s = SOURCE.Where(t => t.ItemId.Contains(SearchItemId));
+                var s = SOURCE.Where(t => t.ItemId.IndexOf(SearchItemId, StringComparison.OrdinalIgnoreCase) >= 0);
                 PageIndex = 0;
                 ItemMasterColletion = new ObservableCollection<ItemMaster>(s.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
@@ -113,7 +113,7 @@ namespace MAC.MIOCO.ViewModel
             AllCommand = new DelegateCommand(() =>
             {
                 SearchItemId = "";
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.IndexOf(SearchItemId, StringComparison.OrdinalIgnoreCase) >= 0).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
 
             SelectCommand = new DelegateCommand<ItemMaster>(s =>
@@ -393,7 +393,7 @@ namespace MAC.MIOCO.ViewModel
                 switch (columnName)
                 {
                     case nameof(ItemId):
-                        if(IsRepeat)
+                        if(IsRepeat && !string.IsNullOrEmpty(ItemId))
                         {
                             ret = " * 商品编号重复请检查！！！";
                         }

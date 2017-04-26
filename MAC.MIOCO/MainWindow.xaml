@@ -7,6 +7,7 @@
         xmlns:w="clr-namespace:MAC.MIOCO"
         ResizeMode="NoResize"
         Background="BlanchedAlmond"
+        Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="MAC.MIOCO" Height="700" Width="1000">
@@ -18,7 +19,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock FontSize="20" Width="80">账号：</TextBlock>
-            <TextBox Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Height="30" FontSize="20" Width="300">
+            <TextBox x:Name="txtUserName" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Height="30" FontSize="20" Width="300">
                 <Validation.ErrorTemplate>
                     <ControlTemplate>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
