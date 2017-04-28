@@ -14,6 +14,12 @@ namespace MAC.MIOCO.ViewModel
     public class CustomerViewModel : ViewModelBase, IDataErrorInfo
     {
 
+        private string Id;
+
+        private bool IsPhoneRepeat = false;
+
+        private bool IsIMRepeat = false;
+
         /// <summary>
         /// 
         /// </summary>
@@ -51,6 +57,49 @@ namespace MAC.MIOCO.ViewModel
                 }
 
             }, CanExcute);
+
+            UpdateCommand = new DelegateCommand(() =>
+            {
+                var item = new Customer()
+                {
+                    Id = Id,
+                    Name = Name,
+                    Phone = Phone,
+                    IM = IM,
+                    Discount = Discount,
+                    Deposit = string.IsNullOrEmpty(Deposit) ? 0 : decimal.Parse(Deposit),
+                    Remark = Remark,
+                    UpdateTime = DateTime.Now
+                };
+
+                if (SqlServerCompactService.UpdateCustomer(item))
+                {
+                    InitialControlValue();
+                    BindData();
+                    InsertCommandVisibility = Visibility.Visible;
+                    UpdateCommandVisibility = Visibility.Collapsed;
+                }
+            }, CanExcute);
+
+            SelectCommand = new DelegateCommand<Customer>(s =>
+            {
+                if (s != null)
+                {
+                    InsertCommandVisibility = Visibility.Collapsed;
+                    UpdateCommandVisibility = Visibility.Visible;
+
+                    Id = s.Id;
+                    Name = s.Name;
+                    Phone = s.Phone;
+                    IM = s.IM;
+                    Discount = s.Discount;
+                    Deposit = s.Deposit.ToString();
+                    Remark = s.Remark;
+
+                    IsPhoneRepeat = false;
+                    IsIMRepeat = false;
+                }
+            });
 
 
             ClearCommand = new DelegateCommand(() =>
@@ -96,7 +145,7 @@ namespace MAC.MIOCO.ViewModel
             var ret = false;
             decimal j = 0;
 
-            if (!string.IsNullOrEmpty(Name) && (!string.IsNullOrEmpty(Phone) || !string.IsNullOrEmpty(IM)))
+            if (!string.IsNullOrEmpty(Name) && ((!string.IsNullOrEmpty(Phone) && !IsPhoneRepeat) || (!string.IsNullOrEmpty(IM) && !IsIMRepeat)))
             {
                 ret = true;
             }
@@ -125,6 +174,8 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand UpdateCommand { get; private set; }
 
         public DelegateCommand ClearCommand { get; private set; }
+
+        public DelegateCommand<Customer> SelectCommand { get; private set; }
 
         public DelegateCommand SearchCommand { get; private set; }
 
@@ -215,6 +266,15 @@ namespace MAC.MIOCO.ViewModel
             {
                 _Phone = value;
                 OnPropertyChanged(nameof(Phone));
+
+                if (SOURCE.FirstOrDefault(s => string.Compare(s.Phone, value, true) == 0 && string.Compare(s.Id, Id, true) != 0) != null)
+                {
+                    IsPhoneRepeat = true;
+                }
+                else
+                {
+                    IsPhoneRepeat = false;
+                }
             }
         }
 
@@ -226,6 +286,15 @@ namespace MAC.MIOCO.ViewModel
             {
                 _IM = value;
                 OnPropertyChanged(nameof(IM));
+
+                if (SOURCE.FirstOrDefault(s => string.Compare(s.IM, value, true) == 0 && string.Compare(s.Id, Id, true) != 0) != null)
+                {
+                    IsIMRepeat = true;
+                }
+                else
+                {
+                    IsIMRepeat = false;
+                }
             }
         }
 
@@ -281,18 +350,18 @@ namespace MAC.MIOCO.ViewModel
                 decimal j = 0;
                 switch (columnName)
                 {
-                    //case nameof(ItemId):
-                    //    if (IsRepeat && !string.IsNullOrEmpty(ItemId))
-                    //    {
-                    //        ret = " * 商品编号重复请检查！！！";
-                    //    }
-                    //    break;
-                    //case nameof(ItemSize):
-                    //    if (!string.IsNullOrEmpty(ItemSize) && !int.TryParse(ItemSize, out i))
-                    //    {
-                    //        ret = " * 请输入整数！！！";
-                    //    }
-                    //    break;
+                    case nameof(Phone):
+                        if (IsPhoneRepeat && !string.IsNullOrEmpty(Phone))
+                        {
+                            ret = " * 电话重复请检查！！！";
+                        }
+                        break;
+                    case nameof(IM):
+                        if (IsIMRepeat && !string.IsNullOrEmpty(IM))
+                        {
+                            ret = " * IM重复请检查！！！";
+                        }
+                        break;
                     case nameof(Deposit):
                         if (!string.IsNullOrEmpty(Deposit) && !decimal.TryParse(Deposit, out j))
                         {

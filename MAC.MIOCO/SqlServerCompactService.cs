@@ -170,5 +170,40 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        public static bool UpdateCustomer(Customer item)
+        {
+            var sql = @"UPDATE Customer
+                       SET Name = @Name
+                          ,Id = @Id
+                          ,Phone = @Phone
+                          ,IM = @IM
+                          ,Deposit = @Deposit
+                          ,Remark = @Remark
+                          ,Discount = @Discount
+                          ,UpdateTime = @UpdateTime
+                     WHERE Id = @Id";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = item.Name },
+                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                    new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = item.Phone },
+                    new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = item.IM },
+                    new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = item.Deposit },
+                    new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = item.Remark },
+                    new SqlCeParameter("Discount", SqlDbType.Int) { Value = item.Discount },
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                };
+                command.Parameters.AddRange(parameters);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
+        }
+
     }
 }

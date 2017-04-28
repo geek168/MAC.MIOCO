@@ -236,7 +236,7 @@ namespace MAC.MIOCO.ViewModel
                 _ItemId = value;
                 OnPropertyChanged(nameof(ItemId));
 
-                if (SOURCE.FirstOrDefault(s => string.Compare(s.ItemId, value, true) == 0) != null)
+                if (SOURCE.FirstOrDefault(s => string.Compare(s.ItemId, value, true) == 0 && string.Compare(s.Id, Id, true) != 0) != null)
                 {
                     IsRepeat = true;
                 }
