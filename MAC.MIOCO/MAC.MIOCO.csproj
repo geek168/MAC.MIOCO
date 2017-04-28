@@ -216,11 +216,12 @@
     <Resource Include="Resource\Logout.png" />
     <Resource Include="Resource\Shop.png" />
     <Resource Include="Resource\Webalys-Kameleon.pics-Shop.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Data\MIOCO.sdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
