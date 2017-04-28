@@ -75,7 +75,7 @@ namespace MAC.MIOCO
                     new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
                     new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
                     new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
-                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
+                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color ?? "" }
                 };
                 command.Parameters.AddRange(parameters);
                 ret = command.ExecuteNonQuery() > 0;
@@ -135,6 +135,33 @@ namespace MAC.MIOCO
                 var parameters = new[]
                 {
                     new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                };
+                command.Parameters.AddRange(parameters);
+                ret = command.ExecuteNonQuery() > 0;
+                conn.Close();
+            }
+            return ret;
+        }
+
+        public static bool InsertCustomer(Customer customer)
+        {
+            var sql = @"INSERT INTO Customer(Name,Id,Phone,IM,Deposit,Remark,Discount,UpdateTime)
+                        VALUES (@Name,@Id,@Phone,@IM,@Deposit,@Remark,@Discount,@UpdateTime)";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = customer.Name },
+                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = customer.Id },
+                    new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = customer.Phone ?? ""},
+                    new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = customer.IM ?? "" },
+                    new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = customer.Deposit },
+                    new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = customer.Remark ?? "" },
+                    new SqlCeParameter("Discount", SqlDbType.Int) { Value = customer.Discount },
+                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = customer.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                 };
                 command.Parameters.AddRange(parameters);
                 ret = command.ExecuteNonQuery() > 0;

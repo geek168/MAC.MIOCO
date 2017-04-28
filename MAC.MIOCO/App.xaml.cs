@@ -22,7 +22,7 @@ namespace MAC.MIOCO
 
         private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("程序出现严重错误："+e.Exception.InnerException.Message);
+            MessageBox.Show("程序出现严重错误：" + e.Exception.Message);
             e.Handled = true;
         }
 

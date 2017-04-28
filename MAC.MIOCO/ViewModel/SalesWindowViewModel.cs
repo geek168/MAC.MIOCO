@@ -124,12 +124,21 @@ namespace MAC.MIOCO.ViewModel
                 w.ShowDialog();
             });
 
+            CustomerCommand = new DelegateCommand(() =>
+            {
+                CustomerWindow w = new CustomerWindow();
+                CustomerViewModel model = new CustomerViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
+            });
+
             StockCommand = new DelegateCommand(() =>
             {
                 StockWindow w = new StockWindow();
                 StockViewModel model = new StockViewModel(w);
                 w.DataContext = model;
-                w.Owner = App.Current.MainWindow;
+                w.Owner =  App.Current.MainWindow;
                 w.ShowDialog();
             });
 
@@ -196,6 +205,8 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand SoldCommand { get; private set; }
 
         public DelegateCommand SalesItemCommand { get; private set; }
+
+        public DelegateCommand CustomerCommand { get; private set; }
 
         public DelegateCommand StockCommand { get; private set; }
 

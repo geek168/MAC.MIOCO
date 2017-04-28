@@ -395,7 +395,7 @@ namespace MAC.MIOCO.ViewModel
                     case nameof(ItemId):
                         if(IsRepeat && !string.IsNullOrEmpty(ItemId))
                         {
-                            ret = " * 商品编号重复请检查！！！";
+                            ret = " * 编号重复请检查！！！";
                         }
                         break;
                     case nameof(ItemSize):
@@ -407,13 +407,13 @@ namespace MAC.MIOCO.ViewModel
                     case nameof(StockPrice):
                         if (!string.IsNullOrEmpty(StockPrice) && !decimal.TryParse(StockPrice, out j))
                         {
-                            ret = " * 请输入整数！！！";
+                            ret = " * 请输入数字！！！";
                         }
                         break;
                     case nameof(Price):
                         if (!string.IsNullOrEmpty(Price) && !decimal.TryParse(Price, out j))
                         {
-                            ret = " * 请输入整数！！！";
+                            ret = " * 请输入数字！！！";
                         }
                         break;
                 }

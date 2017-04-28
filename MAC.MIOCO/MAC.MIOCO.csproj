@@ -102,17 +102,22 @@
     <Compile Include="Converters\ItemTypeConverter.cs" />
     <Compile Include="Converters\SalesTypeConverter.cs" />
     <Compile Include="ExForCastDataToObject.cs" />
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\ItemMaster.cs" />
     <Compile Include="Model\ItemSales.cs" />
     <Compile Include="Model\ItemTypeModel.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="SqlServerCompactService.cs" />
+    <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\SalesItemViewModel.cs" />
     <Compile Include="ViewModel\SalesWindowViewModel.cs" />
     <Compile Include="ViewModel\StockViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\VoidWindowViewModel.cs" />
+    <Compile Include="View\CustomerWindow.xaml.cs">
+      <DependentUpon>CustomerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SalesItemWindow.xaml.cs">
       <DependentUpon>SalesItemWindow.xaml</DependentUpon>
     </Compile>
@@ -138,6 +143,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resource\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
