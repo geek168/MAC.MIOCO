@@ -47,25 +47,17 @@ namespace MAC.MIOCO.ViewModel
             LogoutCommand = new DelegateCommand(Execute, () => { return true; });
             CloseCommand = new DelegateCommand(() => { Application.Current.Shutdown(); });
 
-            //SOURCE = new ObservableCollection<ItemMaster>
-            //{
-            //    new ItemMaster {ItemId="MIC123456789", ItemName="春装上衣--ABC110", ItemSize =3, ItemType = 0, StockCount=10, SalesCount=1, StockPrice=250 , Price = 300},
-            //    new ItemMaster {ItemId="MIC123456ABC", ItemName="夏季装上衣--GDA110", ItemSize =5, ItemType = 1, StockCount=0, SalesCount=1, StockPrice=116 ,Price=150},
-            //    new ItemMaster {ItemId="MIC12345633A", ItemName="冬装大衣--ABC110", ItemSize =3, ItemType = 2, StockCount=9, SalesCount=1, StockPrice=56 ,Price=60},
-            //    new ItemMaster {ItemId="MIC123456891", ItemName="秋装连衣裙ABC110", ItemSize =7, ItemType = 3, StockCount=3, SalesCount=1, StockPrice=218 ,Price=220},
-            //    new ItemMaster {ItemId="MIC123456301", ItemName="春装坎肩ABC110", ItemSize =7, ItemType = 4, StockCount=0, SalesCount=1, StockPrice=380,Price=385 },
-            //    new ItemMaster {ItemId="MIC123456EFT", ItemName="夏装披风加99生命ABC110", ItemSize =7, ItemType = 5, StockCount=5, SalesCount=1, StockPrice=158 ,Price=160},
-            //    new ItemMaster {ItemId="MIC123456GHJ", ItemName="秋装上衣ABC110", ItemSize =7, ItemType = 6, StockCount=6, SalesCount=1, StockPrice=188,Price=200 },
-            //    new ItemMaster {ItemId="MIC12345699A", ItemName="冬装上衣ABC110", ItemSize =5, ItemType = 7, StockCount=9, SalesCount=1, StockPrice=66 ,Price=100},
-            //    new ItemMaster {ItemId="MIC123456QWR", ItemName="完美装上衣ABC110", ItemSize =7, ItemType = 8, StockCount=0, SalesCount=1, StockPrice=999,Price=1111 },
-            //    new ItemMaster {ItemId="MIC123456GTL", ItemName="无敌漂亮美少女上衣11111111111111111111111111ABC11011", ItemSize =3, ItemType = 0, StockCount=2, SalesCount=1, StockPrice=19999,Price=20000 },
-            //    new ItemMaster {ItemId="MIC123456GTL", ItemName="巴拉巴拉小魔仙ABC110", ItemSize =3, ItemType = 0, StockCount=2, SalesCount=1, StockPrice=9999,Price=10000 },
-            //    new ItemMaster {ItemId="MIC123456GTL", ItemName="旅居下ABC110", ItemSize =11, ItemType = 0, StockCount=2, SalesCount=1, StockPrice=8888,Price=9999 },
-            //    new ItemMaster {ItemId="MIC123456GTL", ItemName="无敌浩克ABC110", ItemSize =15, ItemType = 0, StockCount=2, SalesCount=1, StockPrice=6666,Price=8888 },
-            //    new ItemMaster {ItemId="MIC123456GTL", ItemName="钢铁侠ABC110", ItemSize =13, ItemType = 0, StockCount=2, SalesCount=1, StockPrice=454547 ,Price=99999999}
-            //};
+            SelectItemMasterCommand = new DelegateCommand(() =>
+            {
+                SelectItemMasterWindow w = new SelectItemMasterWindow();
+                SelectItemMasterViewModel model = new SelectItemMasterViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
 
-            SOURCE = new ObservableCollection<ItemMaster>(SqlServerCompactService.GetData("ItemMaster").Cast<ItemMaster>());
+                SOURCE = new ObservableCollection<ItemMaster>(model.CheckedList);
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            });
 
             SelectCommand = new DelegateCommand<ItemMaster>(s =>
             {
@@ -88,32 +80,32 @@ namespace MAC.MIOCO.ViewModel
                 }
             });
 
-            ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            RemoveCommand = new DelegateCommand<ItemMaster>(s =>
+            {
+                SOURCE.Remove(s);
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemId = "";
+                ItemName = "";
+                ItemSize = 0;
+                ItemType = 0;
+                StockPrice = 0;
+                Price = 0;
+                Count = 1;
+            });
+
+            //ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
 
             PreviousCommand = new DelegateCommand(() =>
             {
                 PageIndex--;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             },()=> { return PageIndex > 0 ? true : false; });
 
             NextCommand = new DelegateCommand(() =>
             {
                 PageIndex++;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
-            },()=> { return (PageIndex + 1) * PAGESIZE < SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Count() ? true : false; });
-
-            SearchCommand = new DelegateCommand(() =>
-            {
-                var s = SOURCE.Where(t => t.ItemId.Contains(SearchItemId));
-                PageIndex = 0;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(s.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
-            }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
-
-            AllCommand = new DelegateCommand(() =>
-            {
-                SearchItemId = "";
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Where(t => t.ItemId.Contains(SearchItemId)).Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
-            }, () => { return string.IsNullOrEmpty(SearchItemId) ? false : true; });
+                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            },()=> { return (PageIndex + 1) * PAGESIZE < SOURCE.Count() ? true : false; });
 
             SalesItemCommand = new DelegateCommand(() =>
             {
@@ -192,11 +184,11 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand LogoutCommand { get; private set; }
         public DelegateCommand CloseCommand { get; private set; }
 
+        public DelegateCommand SelectItemMasterCommand { get; private set; }
+
         public DelegateCommand<ItemMaster> SelectCommand { get; private set; }
 
-        public DelegateCommand SearchCommand { get; private set; }
-
-        public DelegateCommand AllCommand { get; private set; }
+        public DelegateCommand<ItemMaster> RemoveCommand { get; private set; }
 
         public DelegateCommand PreviousCommand { get; private set; }
 
@@ -342,16 +334,16 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
-        private string _SearchItemId = "";
-        public string SearchItemId
-        {
-            get { return _SearchItemId; }
-            set
-            {
-                _SearchItemId = value;
-                OnPropertyChanged(nameof(SearchItemId));
-            }
-        }
+        //private string _SearchItemId = "";
+        //public string SearchItemId
+        //{
+        //    get { return _SearchItemId; }
+        //    set
+        //    {
+        //        _SearchItemId = value;
+        //        OnPropertyChanged(nameof(SearchItemId));
+        //    }
+        //}
 
         #endregion
     }

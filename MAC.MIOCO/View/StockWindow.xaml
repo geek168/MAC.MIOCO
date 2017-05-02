@@ -108,7 +108,7 @@
                 <DockPanel VerticalAlignment="Center">
                     <TextBox IsReadOnly="True" Background="LightGray" Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
                              DockPanel.Dock="Right" TextAlignment="Right" Width="30" Margin="2 0 0 0"/>
-                    <Slider Minimum="1" Maximum="20" TickPlacement="None" TickFrequency="1" Value="{Binding Count,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    <Slider Minimum="1" Maximum="50" TickPlacement="None" TickFrequency="1" Value="{Binding Count,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             VerticalAlignment="Center" Width="250" IsSnapToTickEnabled="True" Name="slValue" />
                 </DockPanel>
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="5 0 0 0">件</TextBlock>
@@ -282,7 +282,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
                         <i:InvokeCommandAction Command="{Binding SelectCommand}" 
                             CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
                     </i:EventTrigger>
