@@ -61,25 +61,38 @@ namespace MAC.MIOCO
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                var parameters = new[] 
+                SqlCeTransaction tx = null;
+                try
                 {
-                    new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
-                    new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
-                    new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
-                    new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
-                    new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
-                    new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
-                    new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
-                    new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
-                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
-                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color ?? "" }
-                };
-                command.Parameters.AddRange(parameters);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
+                        new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
+                        new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
+                        new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
+                        new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
+                        new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
+                        new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
+                        new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                        new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                        new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color ?? "" }
+                    };
+                    command.Parameters.AddRange(parameters);
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return ret;
         }
@@ -101,25 +114,38 @@ namespace MAC.MIOCO
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                var parameters = new[]
+                SqlCeTransaction tx = null;
+                try
                 {
-                    new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
-                    new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
-                    new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
-                    new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
-                    new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
-                    new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
-                    new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
-                    new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
-                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
-                    new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
-                };
-                command.Parameters.AddRange(parameters);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
+                        new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = item.ItemName },
+                        new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
+                        new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
+                        new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
+                        new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
+                        new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
+                        new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                        new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                        new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
+                    };
+                    command.Parameters.AddRange(parameters);
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return ret;
         }
@@ -130,15 +156,28 @@ namespace MAC.MIOCO
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                var parameters = new[]
+                SqlCeTransaction tx = null;
+                try
                 {
-                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                };
-                command.Parameters.AddRange(parameters);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                    };
+                    command.Parameters.AddRange(parameters);
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return ret;
         }
@@ -150,22 +189,35 @@ namespace MAC.MIOCO
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                var parameters = new[]
+                SqlCeTransaction tx = null;
+                try
                 {
-                    new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = customer.Name },
-                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = customer.Id },
-                    new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = customer.Phone ?? ""},
-                    new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = customer.IM ?? "" },
-                    new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = customer.Deposit },
-                    new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = customer.Remark ?? "" },
-                    new SqlCeParameter("Discount", SqlDbType.Int) { Value = customer.Discount },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = customer.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
-                };
-                command.Parameters.AddRange(parameters);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = customer.Name },
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = customer.Id },
+                        new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = customer.Phone ?? ""},
+                        new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = customer.IM ?? "" },
+                        new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = customer.Deposit },
+                        new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = customer.Remark ?? "" },
+                        new SqlCeParameter("Discount", SqlDbType.Int) { Value = customer.Discount },
+                        new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = customer.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                    };
+                    command.Parameters.AddRange(parameters);
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return ret;
         }
@@ -185,22 +237,35 @@ namespace MAC.MIOCO
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                var parameters = new[]
+                SqlCeTransaction tx = null;
+                try
                 {
-                    new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = item.Name },
-                    new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
-                    new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = item.Phone },
-                    new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = item.IM },
-                    new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = item.Deposit },
-                    new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = item.Remark },
-                    new SqlCeParameter("Discount", SqlDbType.Int) { Value = item.Discount },
-                    new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
-                };
-                command.Parameters.AddRange(parameters);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = item.Name },
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                        new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = item.Phone },
+                        new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = item.IM },
+                        new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = item.Deposit },
+                        new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = item.Remark },
+                        new SqlCeParameter("Discount", SqlDbType.Int) { Value = item.Discount },
+                        new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    };
+                    command.Parameters.AddRange(parameters);
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return ret;
         }
