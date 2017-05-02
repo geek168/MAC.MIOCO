@@ -66,7 +66,7 @@ namespace MAC.MIOCO
                 {
                     conn.Open();
                     tx = conn.BeginTransaction();
-                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    SqlCeCommand command = conn.CreateCommand();
                     var parameters = new[]
                     {
                         new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
@@ -82,6 +82,7 @@ namespace MAC.MIOCO
                         new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color ?? "" }
                     };
                     command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
                     tx.Commit();
                 }
@@ -119,7 +120,7 @@ namespace MAC.MIOCO
                 {
                     conn.Open();
                     tx = conn.BeginTransaction();
-                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    SqlCeCommand command = conn.CreateCommand();
                     var parameters = new[]
                     {
                         new SqlCeParameter("ItemId", SqlDbType.NVarChar, 100) { Value = item.ItemId },
@@ -135,6 +136,7 @@ namespace MAC.MIOCO
                         new SqlCeParameter ( "Color", SqlDbType.NVarChar, 50) { Value = item.Color }
                     };
                     command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
                     tx.Commit();
                 }
@@ -161,12 +163,13 @@ namespace MAC.MIOCO
                 {
                     conn.Open();
                     tx = conn.BeginTransaction();
-                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    SqlCeCommand command = conn.CreateCommand();
                     var parameters = new[]
                     {
                         new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
                     };
                     command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
                     tx.Commit();
                 }
@@ -194,7 +197,7 @@ namespace MAC.MIOCO
                 {
                     conn.Open();
                     tx = conn.BeginTransaction();
-                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    SqlCeCommand command = conn.CreateCommand();
                     var parameters = new[]
                     {
                         new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = customer.Name },
@@ -207,6 +210,7 @@ namespace MAC.MIOCO
                         new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = customer.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                     };
                     command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
                     tx.Commit();
                 }
@@ -242,7 +246,7 @@ namespace MAC.MIOCO
                 {
                     conn.Open();
                     tx = conn.BeginTransaction();
-                    SqlCeCommand command = new SqlCeCommand(sql, conn);
+                    SqlCeCommand command = conn.CreateCommand();
                     var parameters = new[]
                     {
                         new SqlCeParameter("Name", SqlDbType.NVarChar, 100) { Value = item.Name },
@@ -255,6 +259,7 @@ namespace MAC.MIOCO
                         new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     };
                     command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
                     tx.Commit();
                 }
