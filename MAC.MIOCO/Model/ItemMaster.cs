@@ -33,7 +33,7 @@ namespace MAC.MIOCO.Model
 
         public int StockCount { get; set; }
 
-        public int SalesCount { get; set; }
+        //public int SalesCount { get; set; }
 
         public decimal StockPrice { get; set; }
 

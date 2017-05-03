@@ -56,8 +56,8 @@ namespace MAC.MIOCO
 
         public static bool InsertItemMaster(ItemMaster item)
         {
-            var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,SalesCount,StockPrice,Price,Id,UpdateTime,Color)
-                        VALUES (@ItemId,@ItemName,@ItemSize,@ItemType,@StockCount,@SalesCount,@StockPrice,@Price,@Id,@UpdateTime,@Color)";
+            var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,StockPrice,Price,Id,UpdateTime,Color)
+                        VALUES (@ItemId,@ItemName,@ItemSize,@ItemType,@StockCount,@StockPrice,@Price,@Id,@UpdateTime,@Color)";
             var ret = false;
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
@@ -74,7 +74,6 @@ namespace MAC.MIOCO
                         new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
                         new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
                         new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
-                        new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
                         new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
                         new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
                         new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
@@ -106,7 +105,6 @@ namespace MAC.MIOCO
                            ,ItemSize = @ItemSize
                            ,ItemType = @ItemType
                            ,StockCount = @StockCount
-                           ,SalesCount = @SalesCount
                            ,StockPrice = @StockPrice
                            ,Price = @Price
                            ,UpdateTime = @UpdateTime
@@ -128,7 +126,6 @@ namespace MAC.MIOCO
                         new SqlCeParameter("ItemSize", SqlDbType.Int) { Value = item.ItemSize },
                         new SqlCeParameter("ItemType", SqlDbType.Int) { Value = item.ItemType },
                         new SqlCeParameter("StockCount", SqlDbType.Int) { Value = item.StockCount },
-                        new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = item.SalesCount },
                         new SqlCeParameter("StockPrice", SqlDbType.Decimal) { Value = item.StockPrice },
                         new SqlCeParameter("Price", SqlDbType.Decimal) { Value = item.Price },
                         new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },

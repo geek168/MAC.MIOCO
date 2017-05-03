@@ -23,7 +23,7 @@ namespace MAC.MIOCO.ViewModel
             {
                 window.Close();
 
-                CheckedList = SOURCE.Where(s => s.IsChecked).ToList();
+                CheckedList = SOURCE.Where(s => s.IsChecked && s.StockCount > 0).ToList();
             });
 
             SearchCommand = new DelegateCommand(() =>

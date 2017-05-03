@@ -132,22 +132,22 @@
                 <TextBox Text="{Binding ItemType,Converter={StaticResource itemtypeConverter}}" IsReadOnly="True" Background="LightGray" Width="150" VerticalContentAlignment="Center"></TextBox>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Height="30">
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">数量：</TextBlock>
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">售出数量：</TextBlock>
                 <DockPanel VerticalAlignment="Center">
                     <TextBox IsReadOnly="True" Background="LightGray" Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
                              DockPanel.Dock="Right" TextAlignment="Right" Width="30" Margin="2 0 0 0"/>
-                    <Slider Minimum="1" Maximum="20" TickPlacement="None" TickFrequency="1" Value="{Binding Count,Mode=TwoWay}" 
+                    <Slider Minimum="1" Maximum="{Binding SliderMaximum}" TickPlacement="None" TickFrequency="1" Value="{Binding Count,Mode=TwoWay}" 
                             VerticalAlignment="Center" Width="250" IsSnapToTickEnabled="True" Name="slValue" />
                 </DockPanel>
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="5 0 0 0">件</TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Height="30">
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">进货价格：</TextBlock>
-                <TextBox Text="{Binding StockPrice}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
-                <TextBlock VerticalAlignment="Center" Width="20" FontSize="16" Margin="5 0 0 0">元</TextBlock>
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">进价：</TextBlock>
+                <TextBox Text="{Binding StockPrice}" IsReadOnly="True" Background="LightGray" Width="85" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="45" FontSize="16" Margin="5 0 0 0">元 / 件</TextBlock>
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="35 0 0 0">定价：</TextBlock>
-                <TextBox Text="{Binding Price}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
-                <TextBlock VerticalAlignment="Center" Width="20" FontSize="16" Margin="5 0 0 0">元</TextBlock>
+                <TextBox Text="{Binding Price}" IsReadOnly="True" Background="LightGray" Width="85" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="45" FontSize="16" Margin="5 0 0 0">元 / 件</TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">客户名称：</TextBlock>
@@ -155,8 +155,8 @@
                 <Button Width="80" Margin="5 0 0 0" FontSize="14">选择</Button>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" Height="30">
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">客户电话：</TextBlock>
-                <TextBox Width="250" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">余额：</TextBlock>
+                <TextBox Width="250" IsReadOnly="True" Background="LightGray" VerticalContentAlignment="Center"></TextBox>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">客户折扣：</TextBlock>
@@ -165,7 +165,7 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">最终售价：</TextBlock>
-                <TextBox Text="{Binding SoldPirce, Mode=TwoWay}" 
+                <TextBox Text="{Binding SoldPirce, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                          Width="100" FontSize="20" Foreground="Red"
                          VerticalContentAlignment="Center" HorizontalContentAlignment="Right"></TextBox>
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="5 0 0 0">元</TextBlock>
@@ -181,7 +181,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
-            <DataGrid Grid.Row="0" Margin="5" ItemsSource="{Binding ItemMasterColletion}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
+            <DataGrid Grid.Row="0" Margin="5" ItemsSource="{Binding ItemSalesColletion}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
                       RowHeight="27" Height="383" CellStyle="{StaticResource Body_Content_DataGrid_Centering}" SelectionMode="Single"
                       VerticalAlignment="Top" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
@@ -253,7 +253,7 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <!--<DataGridTemplateColumn Header="售出数量" Width="80" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="售出数量" Width="80" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding SalesCount}" HorizontalAlignment="Center"></TextBlock>
@@ -264,7 +264,7 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
-                    </DataGridTemplateColumn>-->
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="进货价格" Width="100" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -277,10 +277,10 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="定价" Width="100" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="售价" Width="100" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Price}" HorizontalAlignment="Right"></TextBlock>
+                                <TextBlock Text="{Binding SoldPirce}" HorizontalAlignment="Right"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>

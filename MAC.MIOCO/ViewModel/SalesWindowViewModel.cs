@@ -30,7 +30,8 @@ namespace MAC.MIOCO.ViewModel
         }
 
 
-        private ObservableCollection<ItemMaster> SOURCE = new ObservableCollection<ItemMaster>();
+        private ObservableCollection<ItemSales> SOURCE = new ObservableCollection<ItemSales>();
+        private ItemSales SelectedItemSales;
 
         /// <summary>
         /// 
@@ -55,35 +56,55 @@ namespace MAC.MIOCO.ViewModel
                 w.Owner = App.Current.MainWindow;
                 w.ShowDialog();
 
-                SOURCE = new ObservableCollection<ItemMaster>(model.CheckedList);
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                //SOURCE = new ObservableCollection<ItemSales>(model.CheckedList);
+                SOURCE.Clear();
+                model.CheckedList.ForEach(s =>
+                {
+                    SOURCE.Add(new ItemSales
+                    {
+                        ItemId = s.ItemId,
+                        ItemName = s.ItemName,
+                        ItemSize = s.ItemSize,
+                        ItemType = s.ItemType,
+                        StockCount = s.StockCount,
+                        SalesType = 1,
+                        SalesCount = 1,
+                        StockPrice = s.StockPrice,
+                        Price = s.Price,
+                        SoldPirce = s.Price
+                    });
+                });
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             });
 
-            SelectCommand = new DelegateCommand<ItemMaster>(s =>
+            SelectCommand = new DelegateCommand<ItemSales>(s =>
             {
                 if (s != null)
                 {
-                    if (s.StockCount == 0)
-                    {
-                        ClearItem();
-                    }
-                    else
-                    {
+                    //if (s.StockCount == 0)
+                    //{
+                    //    ClearItem();
+                    //}
+                    //else
+                    //{
                         ItemId = s.ItemId;
                         ItemName = s.ItemName;
                         ItemSize = s.ItemSize;
                         ItemType = s.ItemType;
                         StockPrice = s.StockPrice;
                         Price = s.Price;
-                        Count = 1;
-                    }
+                        Count = s.SalesCount;
+                        SliderMaximum = s.StockCount;
+
+                        SelectedItemSales = s;
+                    //}
                 }
             });
 
-            RemoveCommand = new DelegateCommand<ItemMaster>(s =>
+            RemoveCommand = new DelegateCommand<ItemSales>(s =>
             {
                 SOURCE.Remove(s);
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
                 ItemId = "";
                 ItemName = "";
                 ItemSize = 0;
@@ -98,13 +119,13 @@ namespace MAC.MIOCO.ViewModel
             PreviousCommand = new DelegateCommand(() =>
             {
                 PageIndex--;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             },()=> { return PageIndex > 0 ? true : false; });
 
             NextCommand = new DelegateCommand(() =>
             {
                 PageIndex++;
-                ItemMasterColletion = new ObservableCollection<ItemMaster>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             },()=> { return (PageIndex + 1) * PAGESIZE < SOURCE.Count() ? true : false; });
 
             SalesItemCommand = new DelegateCommand(() =>
@@ -186,9 +207,9 @@ namespace MAC.MIOCO.ViewModel
 
         public DelegateCommand SelectItemMasterCommand { get; private set; }
 
-        public DelegateCommand<ItemMaster> SelectCommand { get; private set; }
+        public DelegateCommand<ItemSales> SelectCommand { get; private set; }
 
-        public DelegateCommand<ItemMaster> RemoveCommand { get; private set; }
+        public DelegateCommand<ItemSales> RemoveCommand { get; private set; }
 
         public DelegateCommand PreviousCommand { get; private set; }
 
@@ -220,14 +241,14 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
-        private ObservableCollection<ItemMaster> _ItemMasterColletion;
-        public ObservableCollection<ItemMaster> ItemMasterColletion
+        private ObservableCollection<ItemSales> _ItemSalesColletion;
+        public ObservableCollection<ItemSales> ItemSalesColletion
         {
-            get { return _ItemMasterColletion; }
+            get { return _ItemSalesColletion; }
             set
             {
-                _ItemMasterColletion = value;
-                OnPropertyChanged(nameof(ItemMasterColletion));
+                _ItemSalesColletion = value;
+                OnPropertyChanged(nameof(ItemSalesColletion));
             }
         }
 
@@ -309,6 +330,10 @@ namespace MAC.MIOCO.ViewModel
                 OnPropertyChanged(nameof(Count));
 
                 SoldPirce = value * Price * DiscountRate / 100;
+                if (SelectedItemSales != null)
+                {
+                    SelectedItemSales.SalesCount = value;
+                }
             }
         }
 
@@ -331,19 +356,24 @@ namespace MAC.MIOCO.ViewModel
             {
                 _SoldPirce = value;
                 OnPropertyChanged(nameof(SoldPirce));
+
+                if (SelectedItemSales != null)
+                {
+                    SelectedItemSales.SoldPirce = value;
+                }
             }
         }
 
-        //private string _SearchItemId = "";
-        //public string SearchItemId
-        //{
-        //    get { return _SearchItemId; }
-        //    set
-        //    {
-        //        _SearchItemId = value;
-        //        OnPropertyChanged(nameof(SearchItemId));
-        //    }
-        //}
+        private int _SliderMaximum;
+        public int SliderMaximum
+        {
+            get { return _SliderMaximum; }
+            set
+            {
+                _SliderMaximum = value;
+                OnPropertyChanged(nameof(SliderMaximum));
+            }
+        }
 
         #endregion
     }
