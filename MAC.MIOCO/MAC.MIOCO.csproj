@@ -226,9 +226,6 @@
     <Resource Include="Resource\Webalys-Kameleon.pics-Shop.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\MIOCO.sdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Resource\Cart.png" />
   </ItemGroup>
   <ItemGroup>
