@@ -151,9 +151,9 @@ namespace MAC.MIOCO.ViewModel
                 StockWindow w = new StockWindow();
                 StockViewModel model = new StockViewModel(w);
                 w.DataContext = model;
-                w.Owner =  App.Current.MainWindow;
+                w.Owner = App.Current.MainWindow;
                 w.ShowDialog();
-            });
+            }, () => { return ItemSalesColletion == null || ItemSalesColletion.Count == 0; });
 
             VoidCommand = new DelegateCommand(() =>
             {
@@ -170,19 +170,11 @@ namespace MAC.MIOCO.ViewModel
                 message.Append("本次共计售出：" + Count + "件，赚得：" + (SoldPirce - (StockPrice * Count)) + "元！");
                 message.Append(Environment.NewLine);
                 message.Append("是否确认售出？");
-                if (MessageBox.Show(window ,message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                if (MessageBox.Show(window, message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
                 {
                     var ss = 0;
                 }
-            }, () =>
-            {
-                if (!string.IsNullOrEmpty(ItemId) && !string.IsNullOrEmpty(ItemName) && SoldPirce >= 0)
-                {
-                    return true;
-                }
-                else
-                { return false; }
-            });
+            }, () => { return ItemSalesColletion != null && ItemSalesColletion.Count > 0; });
         }
 
         public void Execute()

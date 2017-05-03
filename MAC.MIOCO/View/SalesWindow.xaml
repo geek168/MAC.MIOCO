@@ -185,13 +185,6 @@
                       RowHeight="27" Height="383" CellStyle="{StaticResource Body_Content_DataGrid_Centering}" SelectionMode="Single"
                       VerticalAlignment="Top" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
-                    <!--<DataGridTemplateColumn Header="商品编号" Width="250" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding Image}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
                     <DataGridTemplateColumn Header="商品编号" Width="240" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
