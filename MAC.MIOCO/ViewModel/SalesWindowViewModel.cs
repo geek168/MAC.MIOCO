@@ -32,6 +32,7 @@ namespace MAC.MIOCO.ViewModel
 
         private ObservableCollection<ItemSales> SOURCE = new ObservableCollection<ItemSales>();
         private ItemSales SelectedItemSales;
+        private string CustomerId;
 
         /// <summary>
         /// 
@@ -77,27 +78,71 @@ namespace MAC.MIOCO.ViewModel
                 ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             });
 
+            SelectCustomerCommand = new DelegateCommand(() =>
+            {
+                SelectCustomerWindow w = new SelectCustomerWindow();
+                SelectCustomerViewModel model = new SelectCustomerViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
+
+                if (model.CheckedList != null)
+                {
+                    CustomerId = model.CheckedList.Id;
+                    CustomerName = model.CheckedList.Name;
+                    Phone = model.CheckedList.Phone;
+                    IM = model.CheckedList.IM;
+                    Deposit = model.CheckedList.Deposit;
+                    DiscountRate = model.CheckedList.Discount;
+
+                    ItemSalesColletion.ToList().ForEach(s =>
+                    {
+                        s.SoldPirce = s.SoldPirce * DiscountRate / 100;
+                    });
+
+                    if (SelectedItemSales != null)
+                    {
+                        SoldPirce = SelectedItemSales.SoldPirce;
+                    }
+                }
+            });
+
+            ClearCustomerCommand = new DelegateCommand(() =>
+            {
+                CustomerId = "";
+                CustomerName = "";
+                Phone = "";
+                IM = "";
+                Deposit = 0;
+
+                ItemSalesColletion.ToList().ForEach(s =>
+                {
+                    s.SoldPirce = s.Price;
+                });
+
+                if (SelectedItemSales != null)
+                {
+                    SoldPirce = SelectedItemSales.Price * Count;
+                }
+
+                DiscountRate = 100;
+            });
+
             SelectCommand = new DelegateCommand<ItemSales>(s =>
             {
                 if (s != null)
                 {
-                    //if (s.StockCount == 0)
-                    //{
-                    //    ClearItem();
-                    //}
-                    //else
-                    //{
-                        ItemId = s.ItemId;
-                        ItemName = s.ItemName;
-                        ItemSize = s.ItemSize;
-                        ItemType = s.ItemType;
-                        StockPrice = s.StockPrice;
-                        Price = s.Price;
-                        Count = s.SalesCount;
-                        SliderMaximum = s.StockCount;
+                    SelectedItemSales = s;
 
-                        SelectedItemSales = s;
-                    //}
+                    ItemId = s.ItemId;
+                    ItemName = s.ItemName;
+                    ItemSize = s.ItemSize;
+                    ItemType = s.ItemType;
+                    StockPrice = s.StockPrice;
+                    Price = s.Price;
+                    Count = s.SalesCount;
+                    SliderMaximum = s.StockCount;
+                    SoldPirce = s.SoldPirce;
                 }
             });
 
@@ -144,7 +189,7 @@ namespace MAC.MIOCO.ViewModel
                 w.DataContext = model;
                 w.Owner = App.Current.MainWindow;
                 w.ShowDialog();
-            });
+            }, () => { return string.IsNullOrEmpty(CustomerName); });
 
             StockCommand = new DelegateCommand(() =>
             {
@@ -198,6 +243,10 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand CloseCommand { get; private set; }
 
         public DelegateCommand SelectItemMasterCommand { get; private set; }
+
+        public DelegateCommand SelectCustomerCommand { get; private set; }
+
+        public DelegateCommand ClearCustomerCommand { get; private set; }
 
         public DelegateCommand<ItemSales> SelectCommand { get; private set; }
 
@@ -329,17 +378,6 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
-        private int _DiscountRate = 100;
-        public int DiscountRate
-        {
-            get { return _DiscountRate; }
-            set
-            {
-                _DiscountRate = value;
-                OnPropertyChanged(nameof(DiscountRate));
-            }
-        }
-
         private decimal _SoldPirce;
         public decimal SoldPirce
         {
@@ -364,6 +402,62 @@ namespace MAC.MIOCO.ViewModel
             {
                 _SliderMaximum = value;
                 OnPropertyChanged(nameof(SliderMaximum));
+            }
+        }
+
+        private string _CustomerName;
+        public string CustomerName
+        {
+            get { return _CustomerName; }
+            set
+            {
+                _CustomerName = value;
+                OnPropertyChanged(nameof(CustomerName));
+            }
+        }
+
+        private string _Phone;
+        public string Phone
+        {
+            get { return _Phone; }
+            set
+            {
+                _Phone = value;
+                OnPropertyChanged(nameof(Phone));
+            }
+        }
+
+        private string _IM;
+        public string IM
+        {
+            get { return _IM; }
+            set
+            {
+                _IM = value;
+                OnPropertyChanged(nameof(IM));
+            }
+        }
+
+        private decimal _Deposit;
+        public decimal Deposit
+        {
+            get { return _Deposit; }
+            set
+            {
+                _Deposit = value;
+                OnPropertyChanged(nameof(Deposit));
+            }
+        }
+
+
+        private int _DiscountRate = 100;
+        public int DiscountRate
+        {
+            get { return _DiscountRate; }
+            set
+            {
+                _DiscountRate = value;
+                OnPropertyChanged(nameof(DiscountRate));
             }
         }
 

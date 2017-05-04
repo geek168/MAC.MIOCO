@@ -101,7 +101,7 @@
             <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">商品编号：</TextBlock>
                 <TextBox Text="{Binding ItemId}" IsReadOnly="True" Background="LightGray" Width="250" VerticalContentAlignment="Center"></TextBox>
-                <Button Command="{Binding SelectItemMasterCommand}" Width="80" Margin="5 0 0 0" FontSize="14">选择</Button>
+                <Button Command="{Binding SelectItemMasterCommand}" Width="50" Margin="5 0 0 0" FontSize="14">选择</Button>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">商品名称：</TextBlock>
@@ -145,21 +145,27 @@
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">进价：</TextBlock>
                 <TextBox Text="{Binding StockPrice}" IsReadOnly="True" Background="LightGray" Width="85" VerticalContentAlignment="Center"></TextBox>
                 <TextBlock VerticalAlignment="Center" Width="45" FontSize="16" Margin="5 0 0 0">元 / 件</TextBlock>
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="35 0 0 0">定价：</TextBlock>
+                <TextBlock VerticalAlignment="Center" Width="50" FontSize="16" Margin="35 0 0 0">定价：</TextBlock>
                 <TextBox Text="{Binding Price}" IsReadOnly="True" Background="LightGray" Width="85" VerticalContentAlignment="Center"></TextBox>
                 <TextBlock VerticalAlignment="Center" Width="45" FontSize="16" Margin="5 0 0 0">元 / 件</TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">客户名称：</TextBlock>
-                <TextBox Width="250" VerticalContentAlignment="Center"></TextBox>
-                <Button Width="80" Margin="5 0 0 0" FontSize="14">选择</Button>
+                <TextBox Text="{Binding CustomerName}" IsReadOnly="True" Background="LightGray" Width="250" VerticalContentAlignment="Center"></TextBox>
+                <Button  Command="{Binding SelectCustomerCommand}"  Width="50" Margin="5 0 0 0" FontSize="14">选择</Button>
+                <Button  Command="{Binding ClearCustomerCommand}"  Width="50" Margin="5 0 0 0" FontSize="14">清空</Button>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" Height="30">
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">余额：</TextBlock>
-                <TextBox Width="250" IsReadOnly="True" Background="LightGray" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">电话：</TextBlock>
+                <TextBox Text="{Binding Phone}" Width="150" IsReadOnly="True" Background="LightGray" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="50" FontSize="16" Margin="20 0 0 0">IM：</TextBlock>
+                <TextBox Text="{Binding IM}" Width="170" IsReadOnly="True" Background="LightGray" VerticalContentAlignment="Center"></TextBox>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Height="30">
-                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">客户折扣：</TextBlock>
+                <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">余额：</TextBlock>
+                <TextBox Text="{Binding Deposit}" Width="135" IsReadOnly="True" Background="LightGray" VerticalContentAlignment="Center"></TextBox>
+                <TextBlock VerticalAlignment="Center" Width="45" FontSize="16" Margin="5 0 0 0">元</TextBlock>
+                <TextBlock VerticalAlignment="Center" Width="50" FontSize="16" Margin="20 0 0 0">折扣：</TextBlock>
                 <TextBox Text="{Binding DiscountRate,Mode=TwoWay}" IsReadOnly="True" Background="LightGray" Width="40" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"></TextBox>
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="5 0 0 0">%</TextBlock>
             </StackPanel>
@@ -295,7 +301,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
                         <i:InvokeCommandAction Command="{Binding SelectCommand}" 
                             CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
                     </i:EventTrigger>

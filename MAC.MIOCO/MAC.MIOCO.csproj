@@ -112,6 +112,7 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\SalesItemViewModel.cs" />
     <Compile Include="ViewModel\SalesWindowViewModel.cs" />
+    <Compile Include="ViewModel\SelectCustomerViewModel.cs" />
     <Compile Include="ViewModel\SelectItemMasterViewModel.cs" />
     <Compile Include="ViewModel\StockViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -124,6 +125,9 @@
     </Compile>
     <Compile Include="View\SalesWindow.xaml.cs">
       <DependentUpon>SalesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectCustomerWindow.xaml.cs">
+      <DependentUpon>SelectCustomerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SelectItemMasterWindow.xaml.cs">
       <DependentUpon>SelectItemMasterWindow.xaml</DependentUpon>
@@ -159,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SalesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectCustomerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

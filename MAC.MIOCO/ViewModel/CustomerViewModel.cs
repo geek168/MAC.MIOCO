@@ -76,8 +76,6 @@ namespace MAC.MIOCO.ViewModel
                 {
                     InitialControlValue();
                     BindData();
-                    InsertCommandVisibility = Visibility.Visible;
-                    UpdateCommandVisibility = Visibility.Collapsed;
                 }
             }, CanExcute);
 
@@ -159,12 +157,16 @@ namespace MAC.MIOCO.ViewModel
 
         private void InitialControlValue()
         {
+            Id = "";
             Name = "";
             Phone = "";
             IM = "";
             Discount = 100;
             Deposit = "";
             Remark = "";
+
+            InsertCommandVisibility = Visibility.Visible;
+            UpdateCommandVisibility = Visibility.Collapsed;
         }
 
         public DelegateCommand CloseCommand { get; private set; }
