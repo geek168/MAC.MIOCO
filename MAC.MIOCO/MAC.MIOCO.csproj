@@ -103,6 +103,7 @@
     <Compile Include="Converters\SalesTypeConverter.cs" />
     <Compile Include="ExForCastDataToObject.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\DepositDetail.cs" />
     <Compile Include="Model\ItemMaster.cs" />
     <Compile Include="Model\ItemSales.cs" />
     <Compile Include="Model\ItemTypeModel.cs" />

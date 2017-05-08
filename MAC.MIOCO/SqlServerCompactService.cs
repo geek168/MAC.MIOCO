@@ -272,5 +272,106 @@ namespace MAC.MIOCO
             return ret;
         }
 
+
+        public static bool InsertItemSales(List<ItemSales> list)
+        {
+            var sql = @"INSERT INTO ItemSales(ItemSalesId,ItemMasterId,ItemName,CustomerId,SalesType,SalesCount,SoldPirce,UpdateTime)
+                        VALUES (@ItemSalesId,@ItemMasterId,@ItemName,@CustomerId,@SalesType,@SalesCount,@SoldPirce,@UpdateTime)";
+
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                SqlCeTransaction tx = null;
+                try
+                {
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+
+                    var ItemSalesId = Guid.NewGuid().ToString();
+
+                    list.ForEach(s =>
+                    {
+                        SqlCeCommand command = conn.CreateCommand();
+                        var parameters = new[]
+                        {
+                            new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = ItemSalesId },
+                            new SqlCeParameter("ItemMasterId", SqlDbType.NVarChar, 50) { Value = s.Id },
+                            new SqlCeParameter("ItemName", SqlDbType.NVarChar, 250) { Value = s.ItemName },
+                            new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = s.CustomerId ?? "" },
+                            new SqlCeParameter("SalesType", SqlDbType.Int) { Value = s.SalesType},
+                            new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = s.SalesCount },
+                            new SqlCeParameter("SoldPirce", SqlDbType.Decimal) { Value = s.SoldPirce },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                        };
+                        command.Parameters.AddRange(parameters);
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                    });
+
+                    var cusid = list.FirstOrDefault().CustomerId;
+                    if (!string.IsNullOrEmpty(cusid))
+                    {
+                        sql = "UPDATE Customer SET Deposit = @Deposit, UpdateTime = @UpdateTime WHERE Id = @Id";
+                        var deposit = list.FirstOrDefault().DepositForUpdate - list.Sum(s => s.SoldPirce);
+                        if (deposit < 0)
+                        {
+                            deposit = 0;
+                        };
+                        SqlCeCommand command = conn.CreateCommand();
+                        var parameters = new[]
+                        {
+                            new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = deposit },
+                            new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = cusid },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                        };
+                        command.Parameters.AddRange(parameters);
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+
+                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                        command = conn.CreateCommand();
+                        parameters = new[]
+                        {
+                            new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = cusid },
+                            new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "消费---消费前还有 " + list.FirstOrDefault().DepositForUpdate + " 元，消费了 " + list.Sum(s => s.SoldPirce) + " 元，还剩 " + deposit + " 元" },
+                            new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = ItemSalesId },
+                        };
+                        command.Parameters.AddRange(parameters);
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                    }
+
+                    sql = @"UPDATE ItemMaster SET StockCount = (StockCount - @SalesCount), UpdateTime = @UpdateTime WHERE Id = @Id";
+                    list.ForEach(s =>
+                    {
+                        SqlCeCommand command = conn.CreateCommand();
+                        var parameters = new[]
+                        {
+                            new SqlCeParameter("SalesCount", SqlDbType.Int) { Value = s.SalesCount },
+                            new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = s.Id },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                        };
+                        command.Parameters.AddRange(parameters);
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                    });
+
+                    tx.Commit();
+                    ret = true;
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return ret;
+        }
+
+
     }
 }

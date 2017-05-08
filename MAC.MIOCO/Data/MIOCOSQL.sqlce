@@ -68,3 +68,24 @@ CREATE TABLE [ItemMaster] (
 GO
 ALTER TABLE [ItemMaster] ADD CONSTRAINT [PK_ItemMaster] PRIMARY KEY ([Id]);
 GO
+
+/*ItemSales*/
+CREATE TABLE [ItemSales] (
+  [ItemSalesId] nvarchar(50) NOT NULL
+  ,[ItemMasterId] nvarchar(50) NOT NULL
+  ,[ItemName] nvarchar(250) NOT NULL
+  ,[CustomerId] nvarchar(50) NULL
+  ,[SalesType] int NOT NULL
+  ,[SalesCount] int NOT NULL
+  ,[SoldPirce] money NOT NULL
+  ,[UpdateTime] datetime NOT NULL
+);
+GO
+
+/*DepositDetail*/
+CREATE TABLE [DepositDetail] (
+  [CustomerId] nvarchar(50) NOT NULL
+, [Detail] nvarchar(200) NOT NULL
+, [ItemSalesId] nvarchar(50) NULL
+);
+GO

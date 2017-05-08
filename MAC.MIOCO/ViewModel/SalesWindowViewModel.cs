@@ -40,23 +40,25 @@ namespace MAC.MIOCO.ViewModel
         /// <param name="window"></param>
         public SalesWindowViewModel(Window window)
         {
-            ItemSalesColletion.CollectionChanged += (s, e) =>
-            {
-                if (e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-                {
-                    foreach (ItemSales item in e.NewItems)
-                    {
-                        item.PropertyChanged += (ss, ee) =>
-                        {
-                            if (ee.PropertyName == "SoldPirce")
-                            {
-                                var sss = (ItemSales)ss;
-                                MessageBox.Show(sss.SoldPirce.ToString());
-                            }
-                        };
-                    }
-                }
-            };
+            //ItemSalesColletion.CollectionChanged += (s, e) =>
+            //{
+            //    if (e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            //    {
+            //        decimal amount = 0;
+            //        foreach (ItemSales item in e.NewItems)
+            //        {
+            //            item.PropertyChanged += (ss, ee) =>
+            //            {
+            //                if (ee.PropertyName == "SoldPirce")
+            //                {
+            //                    var sss = (ItemSales)ss;
+            //                }
+            //            };
+            //            amount += item.SoldPirce;
+            //            MessageBox.Show(amount.ToString());
+            //        }
+            //    }
+            //};
 
             SalesDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             Timer timer = new Timer(1000);
@@ -81,6 +83,7 @@ namespace MAC.MIOCO.ViewModel
                 {
                     SOURCE.Add(new ItemSales
                     {
+                        Id = s.Id,
                         ItemId = s.ItemId,
                         ItemName = s.ItemName,
                         ItemSize = s.ItemSize,
@@ -137,7 +140,7 @@ namespace MAC.MIOCO.ViewModel
 
                 ItemSalesColletion.ToList().ForEach(s =>
                 {
-                    s.SoldPirce = s.Price;
+                    s.SoldPirce = s.Price * s.SalesCount;
                 });
 
                 if (SelectedItemSales != null)
@@ -232,13 +235,32 @@ namespace MAC.MIOCO.ViewModel
             SoldCommand = new DelegateCommand(() =>
             {
                 StringBuilder message = new StringBuilder();
-                message.Append("本次共计售出：" + Count + "件，赚得：" + (SoldPirce - (StockPrice * Count)) + "元！");
-                message.Append(Environment.NewLine);
+                if(!string.IsNullOrEmpty(CustomerName))
+                {
+                    var ned = Deposit - ItemSalesColletion.Sum(s => s.SoldPirce);
+                    if (ned < 0)
+                    {
+                        message.Append("注意！！！");
+                        message.Append(Environment.NewLine);
+                        message.Append("客户余额不足，还差：" + ned + "元");
+                        message.Append(Environment.NewLine);
+                    }
+                }
                 message.Append("是否确认售出？");
                 if (MessageBox.Show(window, message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
                 {
-                    var ss = 0;
+                    message.Clear();
+                    message.Append("本次共计售出：" + ItemSalesColletion.Sum(s => s.SalesCount) + "件，赚得：" + (ItemSalesColletion.Sum(s => s.SoldPirce) - ItemSalesColletion.Sum(s => s.StockPrice * s.SalesCount)) + "元！");
+                    MessageBox.Show(message.ToString());
+
+                    if (!string.IsNullOrEmpty(CustomerId))
+                    {
+                        ItemSalesColletion.ToList().ForEach(s => { s.CustomerId = CustomerId; s.DepositForUpdate = Deposit; });
+                    }
+
+                    SqlServerCompactService.InsertItemSales(ItemSalesColletion.ToList());
                 }
+
             }, () => { return ItemSalesColletion != null && ItemSalesColletion.Count > 0; });
         }
 
