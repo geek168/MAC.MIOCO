@@ -1,0 +1,70 @@
+﻿/*ItemTypeModel*/
+CREATE TABLE [ItemTypeModel] (
+  [Type] int IDENTITY (1,1) NOT NULL
+, [ItemTypeName] nvarchar(100) NOT NULL
+);
+GO
+ALTER TABLE [ItemTypeModel] ADD CONSTRAINT [PK_ItemTypeModel] PRIMARY KEY ([Type]);
+GO
+
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('上衣');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('裤子');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('连衣裙');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('半裙');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('鞋子');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('配饰');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('袜子');
+GO
+INSERT INTO [ItemTypeModel]([ItemTypeName]) VALUES ('内裤');
+GO
+
+/*UserAccount*/
+CREATE TABLE [UserAccount] (
+  [UserName] nvarchar(100) NOT NULL
+, [Password] nvarchar(100) NOT NULL
+);
+GO
+ALTER TABLE [UserAccount] ADD CONSTRAINT [PK_UserAccount] PRIMARY KEY ([UserName]);
+GO
+
+-- Script Date: 5/8/2017 11:21 AM  - ErikEJ.SqlCeScripting version 3.5.2.64
+INSERT INTO [UserAccount]([UserName],[Password])VALUES('guli','guli');
+GO
+
+/*Customer*/
+CREATE TABLE [Customer] (
+  [Id] nvarchar(50) NOT NULL
+, [Name] nvarchar(100) NOT NULL
+, [Phone] nvarchar(100) NULL
+, [IM] nvarchar(150) NULL
+, [Deposit] money NOT NULL
+, [Remark] nvarchar(300) NULL
+, [Discount] int NOT NULL
+, [UpdateTime] datetime NOT NULL
+);
+GO
+ALTER TABLE [Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY ([Id]);
+GO
+
+/*ItemMaster*/
+CREATE TABLE [ItemMaster] (
+  [Id] nvarchar(50) NOT NULL
+  ,[ItemId] nvarchar(100) NOT NULL
+  ,[ItemName] nvarchar(250) NOT NULL
+  ,[ItemSize] int NOT NULL
+  ,[ItemType] int NOT NULL
+  ,[StockCount] int NOT NULL
+  ,[StockPrice] money NOT NULL
+  ,[Price] money NOT NULL
+  ,[Color] nvarchar(50) NULL
+  ,[UpdateTime] datetime NOT NULL
+);
+GO
+ALTER TABLE [ItemMaster] ADD CONSTRAINT [PK_ItemMaster] PRIMARY KEY ([Id]);
+GO

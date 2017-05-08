@@ -40,6 +40,24 @@ namespace MAC.MIOCO.ViewModel
         /// <param name="window"></param>
         public SalesWindowViewModel(Window window)
         {
+            ItemSalesColletion.CollectionChanged += (s, e) =>
+            {
+                if (e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+                {
+                    foreach (ItemSales item in e.NewItems)
+                    {
+                        item.PropertyChanged += (ss, ee) =>
+                        {
+                            if (ee.PropertyName == "SoldPirce")
+                            {
+                                var sss = (ItemSales)ss;
+                                MessageBox.Show(sss.SoldPirce.ToString());
+                            }
+                        };
+                    }
+                }
+            };
+
             SalesDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             Timer timer = new Timer(1000);
             timer.Elapsed += (s, e) => { SalesDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); };
@@ -75,7 +93,9 @@ namespace MAC.MIOCO.ViewModel
                         SoldPirce = s.Price
                     });
                 });
-                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                //ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+                ItemSalesColletion.Clear();
+                SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE).ToList().ForEach(ItemSalesColletion.Add);
             });
 
             SelectCustomerCommand = new DelegateCommand(() =>
@@ -282,7 +302,7 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
-        private ObservableCollection<ItemSales> _ItemSalesColletion;
+        private ObservableCollection<ItemSales> _ItemSalesColletion = new ObservableCollection<ItemSales>();
         public ObservableCollection<ItemSales> ItemSalesColletion
         {
             get { return _ItemSalesColletion; }
