@@ -105,7 +105,10 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">余额：</TextBlock>
-                <TextBox Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="100" VerticalContentAlignment="Center">
+                <TextBox Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         IsReadOnly="{Binding DepositIsReadOnly}" 
+                         Background="{Binding DepositBackground}"
+                         Width="100" VerticalContentAlignment="Center">
                     <Validation.ErrorTemplate>
                         <ControlTemplate>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -120,6 +123,7 @@
                     </Validation.ErrorTemplate>
                 </TextBox>
                 <TextBlock Width="50" VerticalAlignment="Center" Margin="5 0 0 0" FontSize="16">元</TextBlock>
+                <Button x:Name="AddDeposit" Command="{Binding AddDepositCommand}" Visibility="{Binding AddDepositCommandVisibility}" Width="50" Margin="5 0 0 0" FontSize="14">增值</Button>
             </StackPanel>
             <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" Height="30">
                 <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">备注：</TextBlock>
@@ -230,5 +234,48 @@
                 </StackPanel>
             </Grid>
         </Grid>
+
+        <Popup IsOpen="{Binding PopupIsOpen}" PlacementTarget="{Binding ElementName=AddDeposit}" StaysOpen="False"
+                   HorizontalOffset="-200" VerticalOffset="5" Width="430" Height="110"
+                   AllowsTransparency="True" PopupAnimation="Slide">
+            <Grid>
+                <Border Margin="0,0,8,8" Background="White" BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5" Opacity="0.4"/>
+                    </Border.Effect>
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Height="40">
+                            <StackPanel>
+                                <TextBlock VerticalAlignment="Center" Width="95" FontSize="16">增值金额：</TextBlock>
+                                <TextBlock VerticalAlignment="Center" Foreground="Red">增值金额需大于 0</TextBlock>
+                            </StackPanel>
+                            <TextBox Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                     Width="160" VerticalContentAlignment="Center" Margin="5 0 0 0">
+                                <Validation.ErrorTemplate>
+                                    <ControlTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border BorderBrush="Red" BorderThickness="1">
+                                                <AdornedElementPlaceholder x:Name="textBox"/>
+                                            </Border>
+                                            <Border Height="32" Background="Red" Margin="5 0 0 0" CornerRadius="5">
+                                                <TextBlock Text="{Binding [0].ErrorContent}" VerticalAlignment="Center" Foreground="White" Width="130"  Margin="5 0 0 0"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Validation.ErrorTemplate>
+                            </TextBox>
+                        </StackPanel>
+                        <Button Command="{Binding UpdateDepositCommand}"
+                            Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                            Width="50" FontSize="16" Margin="0 5 0 0">保存</Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Popup>
+
     </Grid>
 </Window>

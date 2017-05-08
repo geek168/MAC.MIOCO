@@ -209,6 +209,23 @@ namespace MAC.MIOCO
                     command.Parameters.AddRange(parameters);
                     command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
+
+                    if (customer.Deposit > 0)
+                    {
+                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                        command = conn.CreateCommand();
+                        parameters = new[]
+                        {
+                            new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = customer.Id },
+                            new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "增值---" + customer.Deposit + " 元" },
+                            new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = "" },
+                        };
+                        command.Parameters.AddRange(parameters);
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                    }
+
                     tx.Commit();
                 }
                 catch (Exception ex)
@@ -230,7 +247,6 @@ namespace MAC.MIOCO
                           ,Id = @Id
                           ,Phone = @Phone
                           ,IM = @IM
-                          ,Deposit = @Deposit
                           ,Remark = @Remark
                           ,Discount = @Discount
                           ,UpdateTime = @UpdateTime
@@ -250,7 +266,7 @@ namespace MAC.MIOCO
                         new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
                         new SqlCeParameter("Phone", SqlDbType.NVarChar, 100) { Value = item.Phone },
                         new SqlCeParameter("IM", SqlDbType.NVarChar, 150) { Value = item.IM },
-                        new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = item.Deposit },
+                        //new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = item.Deposit }, 注意去掉了 sql 的 Deposit
                         new SqlCeParameter("Remark", SqlDbType.NVarChar, 300) { Value = item.Remark },
                         new SqlCeParameter("Discount", SqlDbType.Int) { Value = item.Discount },
                         new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = item.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") }

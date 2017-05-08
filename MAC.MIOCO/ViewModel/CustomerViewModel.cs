@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MAC.MIOCO.ViewModel
 {
@@ -28,6 +29,7 @@ namespace MAC.MIOCO.ViewModel
         {
             InsertCommandVisibility = Visibility.Visible;
             UpdateCommandVisibility = Visibility.Collapsed;
+            DepositIsReadOnly = false;
 
             BindData();
 
@@ -85,6 +87,7 @@ namespace MAC.MIOCO.ViewModel
                 {
                     InsertCommandVisibility = Visibility.Collapsed;
                     UpdateCommandVisibility = Visibility.Visible;
+                    DepositIsReadOnly = true;
 
                     Id = s.Id;
                     Name = s.Name;
@@ -97,8 +100,28 @@ namespace MAC.MIOCO.ViewModel
                     IsPhoneRepeat = false;
                     IsIMRepeat = false;
                 }
+            }); 
+
+            AddDepositCommand = new DelegateCommand(() =>
+            {
+                PopupIsOpen = !PopupIsOpen;
             });
 
+            UpdateDepositCommand = new DelegateCommand(() =>
+            {
+
+            }, () => {
+                var ret = false;
+                decimal j = 0;
+                if (!string.IsNullOrEmpty(Deposit) && decimal.TryParse(Deposit, out j))
+                {
+                    if (j > 0)
+                    {
+                        ret = true;
+                    }
+                }
+                return ret;
+            });
 
             ClearCommand = new DelegateCommand(() =>
             {
@@ -167,6 +190,7 @@ namespace MAC.MIOCO.ViewModel
 
             InsertCommandVisibility = Visibility.Visible;
             UpdateCommandVisibility = Visibility.Collapsed;
+            DepositIsReadOnly = false;
         }
 
         public DelegateCommand CloseCommand { get; private set; }
@@ -186,6 +210,10 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand PreviousCommand { get; private set; }
 
         public DelegateCommand NextCommand { get; private set; }
+
+        public DelegateCommand AddDepositCommand { get; private set; }
+
+        public DelegateCommand UpdateDepositCommand { get; private set; }
 
 
         private Visibility _InsertCommandVisibility = Visibility.Visible;
@@ -210,6 +238,49 @@ namespace MAC.MIOCO.ViewModel
             }
         }
 
+        private bool _DepositIsReadOnly = false;
+        public bool DepositIsReadOnly
+        {
+            get { return _DepositIsReadOnly; }
+            set
+            {
+                _DepositIsReadOnly = value;
+                OnPropertyChanged(nameof(DepositIsReadOnly));
+
+                if (value)
+                {
+                    DepositBackground = new SolidColorBrush(Colors.LightGray);
+                    AddDepositCommandVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    DepositBackground = new SolidColorBrush(Colors.White);
+                    AddDepositCommandVisibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private SolidColorBrush _DepositBackground = new SolidColorBrush(Colors.White);
+        public SolidColorBrush DepositBackground
+        {
+            get { return _DepositBackground; }
+            set
+            {
+                _DepositBackground = value;
+                OnPropertyChanged(nameof(DepositBackground));
+            }
+        }
+
+        private Visibility _AddDepositCommandVisibility = Visibility.Collapsed;
+        public Visibility AddDepositCommandVisibility
+        {
+            get { return _AddDepositCommandVisibility; }
+            set
+            {
+                _AddDepositCommandVisibility = value;
+                OnPropertyChanged(nameof(AddDepositCommandVisibility));
+            }
+        }
 
         private int PAGESIZE = 14;
         private int _PageIndex = 0;
@@ -330,6 +401,17 @@ namespace MAC.MIOCO.ViewModel
             {
                 _Remark = value;
                 OnPropertyChanged(nameof(Remark));
+            }
+        }
+
+        private bool _PopupIsOpen;
+        public bool PopupIsOpen
+        {
+            get { return _PopupIsOpen; }
+            set
+            {
+                _PopupIsOpen = value;
+                OnPropertyChanged(nameof(PopupIsOpen));
             }
         }
 

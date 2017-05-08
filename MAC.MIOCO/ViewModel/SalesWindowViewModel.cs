@@ -249,16 +249,27 @@ namespace MAC.MIOCO.ViewModel
                 message.Append("是否确认售出？");
                 if (MessageBox.Show(window, message.ToString(), "确认售出点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
                 {
-                    message.Clear();
-                    message.Append("本次共计售出：" + ItemSalesColletion.Sum(s => s.SalesCount) + "件，赚得：" + (ItemSalesColletion.Sum(s => s.SoldPirce) - ItemSalesColletion.Sum(s => s.StockPrice * s.SalesCount)) + "元！");
-                    MessageBox.Show(message.ToString());
-
+                   
                     if (!string.IsNullOrEmpty(CustomerId))
                     {
                         ItemSalesColletion.ToList().ForEach(s => { s.CustomerId = CustomerId; s.DepositForUpdate = Deposit; });
                     }
 
-                    SqlServerCompactService.InsertItemSales(ItemSalesColletion.ToList());
+                    if(SqlServerCompactService.InsertItemSales(ItemSalesColletion.ToList()))
+                    {
+                        message.Clear();
+                        message.Append("本次共计售出：" + ItemSalesColletion.Sum(s => s.SalesCount) + "件，赚得：" + (ItemSalesColletion.Sum(s => s.SoldPirce) - ItemSalesColletion.Sum(s => s.StockPrice * s.SalesCount)) + "元！");
+                        MessageBox.Show(message.ToString());
+
+                        ClearItem();
+                        ItemSalesColletion.Clear();
+                    }
+                    else
+                    {
+                        message.Clear();
+                        message.Append("销售失败，请重试！！！");
+                        MessageBox.Show(message.ToString());
+                    }
                 }
 
             }, () => { return ItemSalesColletion != null && ItemSalesColletion.Count > 0; });
