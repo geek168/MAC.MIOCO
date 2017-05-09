@@ -254,7 +254,7 @@
                                 <TextBlock VerticalAlignment="Center" Foreground="Red">增值金额需大于 0</TextBlock>
                             </StackPanel>
                             <TextBox Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                                     Width="160" VerticalContentAlignment="Center" Margin="5 0 0 0">
+                                     Width="160" Height="30" VerticalContentAlignment="Center" Margin="5 0 0 0">
                                 <Validation.ErrorTemplate>
                                     <ControlTemplate>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

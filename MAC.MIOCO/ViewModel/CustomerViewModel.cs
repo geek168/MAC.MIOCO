@@ -109,7 +109,13 @@ namespace MAC.MIOCO.ViewModel
 
             UpdateDepositCommand = new DelegateCommand(() =>
             {
-
+                decimal j = 0;
+                decimal.TryParse(Deposit, out j);
+                if (SqlServerCompactService.TopUpCustomerDeposit(Id, j))
+                {
+                    BindData();
+                    PopupIsOpen = false;
+                }
             }, () => {
                 var ret = false;
                 decimal j = 0;

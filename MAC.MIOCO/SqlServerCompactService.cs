@@ -41,19 +41,25 @@ namespace MAC.MIOCO
             return dt;
         }
 
-        public static bool Insert(string sql)
-        {
-            var ret = false;
-            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
-            {
-                conn.Open();
-                SqlCeCommand command = new SqlCeCommand(sql, conn);
-                ret = command.ExecuteNonQuery() > 0;
-                conn.Close();
-            }
-            return ret;
-        }
+        //public static bool Insert(string sql)
+        //{
+        //    var ret = false;
+        //    using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+        //    {
+        //        conn.Open();
+        //        SqlCeCommand command = new SqlCeCommand(sql, conn);
+        //        ret = command.ExecuteNonQuery() > 0;
+        //        conn.Close();
+        //    }
+        //    return ret;
+        //}
 
+
+        /// <summary>
+        /// InsertItemMaster
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static bool InsertItemMaster(ItemMaster item)
         {
             var sql = @"INSERT INTO ItemMaster(ItemId,ItemName,ItemSize,ItemType,StockCount,StockPrice,Price,Id,UpdateTime,Color)
@@ -97,6 +103,11 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        /// <summary>
+        /// UpdateItemMaster
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static bool UpdateItemMaster(ItemMaster item)
         {
             var sql = @"UPDATE ItemMaster 
@@ -149,6 +160,11 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        /// <summary>
+        /// DeleteItemMaster
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static bool DeleteItemMaster(ItemMaster item)
         {
             var sql = @"DELETE FROM ItemMaster WHERE Id = @Id";
@@ -182,6 +198,11 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        /// <summary>
+        /// InsertCustomer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public static bool InsertCustomer(Customer customer)
         {
             var sql = @"INSERT INTO Customer(Name,Id,Phone,IM,Deposit,Remark,Discount,UpdateTime)
@@ -240,6 +261,11 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        /// <summary>
+        /// UpdateCustomer
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static bool UpdateCustomer(Customer item)
         {
             var sql = @"UPDATE Customer
@@ -288,7 +314,66 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        /// <summary>
+        /// TopUpCustomerDeposit
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="Deposit"></param>
+        /// <returns></returns>
+        public static bool TopUpCustomerDeposit(string Id, decimal Deposit)
+        {
+            var sql = @"UPDATE Customer SET Deposit = (Deposit + @Deposit) WHERE Id = @Id";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                SqlCeTransaction tx = null;
+                try
+                {
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = conn.CreateCommand();
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = Id },
+                        new SqlCeParameter("Deposit", SqlDbType.Decimal) { Value = Deposit }, 
+                        new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
+                    };
+                    command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
+                    ret = command.ExecuteNonQuery() > 0;
 
+                    sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                    command = conn.CreateCommand();
+                    parameters = new[]
+                    {
+                            new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = Id },
+                            new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "增值---" + Deposit + " 元" },
+                            new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = "" },
+                    };
+                    command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
+                    command.ExecuteNonQuery();
+
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// InsertItemSales
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public static bool InsertItemSales(List<ItemSales> list)
         {
             var sql = @"INSERT INTO ItemSales(ItemSalesId,ItemMasterId,ItemName,CustomerId,SalesType,SalesCount,SoldPirce,UpdateTime)
