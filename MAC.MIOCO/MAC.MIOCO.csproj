@@ -116,6 +116,7 @@
     <Compile Include="ViewModel\SelectCustomerViewModel.cs" />
     <Compile Include="ViewModel\SelectItemMasterViewModel.cs" />
     <Compile Include="ViewModel\StockViewModel.cs" />
+    <Compile Include="ViewModel\ViewCustomerDetailViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\VoidWindowViewModel.cs" />
     <Compile Include="View\CustomerWindow.xaml.cs">
@@ -135,6 +136,9 @@
     </Compile>
     <Compile Include="View\StockWindow.xaml.cs">
       <DependentUpon>StockWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewCustomerDetailWindow.xaml.cs">
+      <DependentUpon>ViewCustomerDetailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VoidWindow.xaml.cs">
       <DependentUpon>VoidWindow.xaml</DependentUpon>
@@ -176,6 +180,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\StockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ViewCustomerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

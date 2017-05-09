@@ -1,5 +1,6 @@
 ﻿using MAC.MIOCO.Command;
 using MAC.MIOCO.Model;
+using MAC.MIOCO.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -115,6 +116,8 @@ namespace MAC.MIOCO.ViewModel
                 {
                     BindData();
                     PopupIsOpen = false;
+
+                    InitialControlValue();
                 }
             }, () => {
                 var ret = false;
@@ -127,6 +130,29 @@ namespace MAC.MIOCO.ViewModel
                     }
                 }
                 return ret;
+            });
+
+
+            DeleteCommand = new DelegateCommand<Customer>(s =>
+            {
+                if (s != null)
+                {
+                    if (MessageBox.Show(window, "是否确认删除该客户？", "确认删除点“Yes”，否则点“No”", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                    {
+                        SqlServerCompactService.DeleteCustomer(s);
+                        BindData();
+                        InitialControlValue();
+                    }
+                }
+            });
+
+            ViewCommand = new DelegateCommand<Customer>(s =>
+            {
+                ViewCustomerDetailWindow w = new ViewCustomerDetailWindow();
+                ViewCustomerDetailViewModel model = new ViewCustomerDetailViewModel(w);
+                w.DataContext = model;
+                w.Owner = App.Current.MainWindow;
+                w.ShowDialog();
             });
 
             ClearCommand = new DelegateCommand(() =>
@@ -220,6 +246,10 @@ namespace MAC.MIOCO.ViewModel
         public DelegateCommand AddDepositCommand { get; private set; }
 
         public DelegateCommand UpdateDepositCommand { get; private set; }
+
+        public DelegateCommand<Customer> DeleteCommand { get; private set; }
+
+        public DelegateCommand<Customer> ViewCommand { get; private set; }
 
 
         private Visibility _InsertCommandVisibility = Visibility.Visible;

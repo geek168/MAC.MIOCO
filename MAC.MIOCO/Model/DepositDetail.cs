@@ -13,5 +13,7 @@ namespace MAC.MIOCO.Model
         public string Detail { get; set; }
 
         public string ItemSalesId { get; set; }
+
+        public DateTime UpdateTime { get; set; }
     }
 }

@@ -132,11 +132,7 @@ namespace MAC.MIOCO.ViewModel
 
             ClearCustomerCommand = new DelegateCommand(() =>
             {
-                CustomerId = "";
-                CustomerName = "";
-                Phone = "";
-                IM = "";
-                Deposit = 0;
+                ClearCustomer();
 
                 ItemSalesColletion.ToList().ForEach(s =>
                 {
@@ -262,6 +258,7 @@ namespace MAC.MIOCO.ViewModel
                         MessageBox.Show(message.ToString());
 
                         ClearItem();
+                        ClearCustomer();
                         ItemSalesColletion.Clear();
                     }
                     else
@@ -290,6 +287,15 @@ namespace MAC.MIOCO.ViewModel
             StockPrice = 0;
             Price = 0;
             Count = 0;
+        }
+
+        private void ClearCustomer()
+        {
+            CustomerId = "";
+            CustomerName = "";
+            Phone = "";
+            IM = "";
+            Deposit = 0;
         }
 
         public DelegateCommand LogoutCommand { get; private set; }

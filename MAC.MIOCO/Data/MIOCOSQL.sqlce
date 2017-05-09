@@ -87,5 +87,6 @@ CREATE TABLE [DepositDetail] (
   [CustomerId] nvarchar(50) NOT NULL
 , [Detail] nvarchar(200) NOT NULL
 , [ItemSalesId] nvarchar(50) NULL
+, [UpdateTime] datetime NOT NULL
 );
 GO

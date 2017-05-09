@@ -233,14 +233,15 @@ namespace MAC.MIOCO
 
                     if (customer.Deposit > 0)
                     {
-                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
-                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId,UpdateTime)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId,@UpdateTime)";
                         command = conn.CreateCommand();
                         parameters = new[]
                         {
                             new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = customer.Id },
                             new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "增值---" + customer.Deposit + " 元" },
                             new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = "" },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = customer.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                         };
                         command.Parameters.AddRange(parameters);
                         command.CommandText = sql;
@@ -315,6 +316,44 @@ namespace MAC.MIOCO
         }
 
         /// <summary>
+        /// DeleteCustomer
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool DeleteCustomer(Customer item)
+        {
+            var sql = @"DELETE FROM Customer WHERE Id = @Id";
+            var ret = false;
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                SqlCeTransaction tx = null;
+                try
+                {
+                    conn.Open();
+                    tx = conn.BeginTransaction();
+                    SqlCeCommand command = conn.CreateCommand();
+                    var parameters = new[]
+                    {
+                        new SqlCeParameter("Id", SqlDbType.NVarChar, 50) { Value = item.Id },
+                    };
+                    command.Parameters.AddRange(parameters);
+                    command.CommandText = sql;
+                    ret = command.ExecuteNonQuery() > 0;
+                    tx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tx.Rollback();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// TopUpCustomerDeposit
         /// </summary>
         /// <param name="Id"></param>
@@ -342,14 +381,15 @@ namespace MAC.MIOCO
                     command.CommandText = sql;
                     ret = command.ExecuteNonQuery() > 0;
 
-                    sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
-                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                    sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId,UpdateTime)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId,@UpdateTime)";
                     command = conn.CreateCommand();
                     parameters = new[]
                     {
                             new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = Id },
                             new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "增值---" + Deposit + " 元" },
                             new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = "" },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
                     };
                     command.Parameters.AddRange(parameters);
                     command.CommandText = sql;
@@ -388,7 +428,8 @@ namespace MAC.MIOCO
                     conn.Open();
                     tx = conn.BeginTransaction();
 
-                    var ItemSalesId = Guid.NewGuid().ToString();
+                    //var ItemSalesId = Guid.NewGuid().ToString();
+                    var ItemSalesId = "MACMIOCO" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
                     list.ForEach(s =>
                     {
@@ -429,14 +470,15 @@ namespace MAC.MIOCO
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
 
-                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId)
-                                VALUES (@CustomerId,@Detail,@ItemSalesId)";
+                        sql = @"INSERT INTO DepositDetail (CustomerId,Detail,ItemSalesId,UpdateTime)
+                                VALUES (@CustomerId,@Detail,@ItemSalesId,@UpdateTime)";
                         command = conn.CreateCommand();
                         parameters = new[]
                         {
                             new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = cusid },
                             new SqlCeParameter("Detail", SqlDbType.NVarChar, 200) { Value = "消费---消费前还有 " + list.FirstOrDefault().DepositForUpdate + " 元，消费了 " + list.Sum(s => s.SoldPirce) + " 元，还剩 " + deposit + " 元" },
                             new SqlCeParameter("ItemSalesId", SqlDbType.NVarChar, 50) { Value = ItemSalesId },
+                            new SqlCeParameter("UpdateTime", SqlDbType.DateTime) { Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") }
                         };
                         command.Parameters.AddRange(parameters);
                         command.CommandText = sql;
@@ -473,6 +515,37 @@ namespace MAC.MIOCO
             return ret;
         }
 
+        public static List<ItemSales> GetItemSales()
+        {
+            List<ItemSales> list = new List<ItemSales>();
+            var sql = @"SELECT ItemSalesId,ItemMasterId,M.ItemId,S.ItemName,CustomerId,SalesType
+                              , SalesCount, SoldPirce, S.UpdateTime FROM ItemSales AS S
+                           INNER JOIN ItemMaster AS M
+                        ON S.ItemMasterId = M.Id ORDER BY UpdateTime DESC";
+            DataTable dt = new DataTable();
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                using (SqlCeDataReader dataReader = command.ExecuteReader())
+                {
+                    dt.Load(dataReader);
+                }
+                conn.Close();
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                var item = new ItemSales();
+                item.ItemSalesId = dr["ItemSalesId"].ToString();
+                item.ItemId = dr["ItemId"].ToString();
+                item.ItemName = dr["ItemName"].ToString();
+                item.SalesType = int.Parse(dr["SalesType"].ToString());
+                item.SalesCount = int.Parse(dr["SalesCount"].ToString());
+                item.SoldPirce = decimal.Parse(dr["SoldPirce"].ToString());
+                list.Add(item);
+            }
+            return list;
+        }
 
     }
 }
