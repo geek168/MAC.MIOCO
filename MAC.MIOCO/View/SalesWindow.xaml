@@ -44,12 +44,12 @@
                 <TextBlock Foreground="DarkBlue" Text="{Binding SalesDate, Mode=TwoWay}" FontSize="20"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Margin="3" Command="{Binding VoidCommand}">
+                <!--<Button Margin="3" Command="{Binding VoidCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" FontSize="20" Foreground="Red" Margin="2 2 2 2">退货</TextBlock>
                         <Image Source="../Resource/Void.png" Height="22" Width="22"></Image>
                     </StackPanel>
-                </Button>
+                </Button>-->
                 <Button Margin="3" Command="{Binding SalesItemCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" FontSize="20" Margin="2 2 2 2">销售统计</TextBlock>

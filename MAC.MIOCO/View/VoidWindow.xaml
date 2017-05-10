@@ -62,58 +62,7 @@
                     <Line Stroke="Red" X1="0" Y1="15" X2="830" Y2="15" Canvas.Top="4" />
                 </Canvas>
             </StackPanel>
-            <Grid Grid.Row="2" Margin="20 0 20 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="34"></RowDefinition>
-                    <RowDefinition Height="34"></RowDefinition>
-                    <RowDefinition Height="34"></RowDefinition>
-                    <RowDefinition Height="34"></RowDefinition>
-                    <RowDefinition Height="34"></RowDefinition>
-                    <RowDefinition Height="34"></RowDefinition>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">商品编号：</TextBlock>
-                    <TextBox Text="{Binding ItemId}" IsReadOnly="True" Background="LightGray" Width="250" VerticalContentAlignment="Center"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">商品名称：</TextBlock>
-                    <TextBox Text="{Binding ItemName}" IsReadOnly="True" Background="LightGray" Width="350" VerticalContentAlignment="Center"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">尺码：</TextBlock>
-                    <TextBox Text="{Binding ItemSize}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">款式：</TextBlock>
-                    <TextBox Text="{Binding ItemType,Converter={StaticResource itemtypeConverter}}" IsReadOnly="True" Background="LightGray" Width="150" VerticalContentAlignment="Center"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">进货价格：</TextBlock>
-                    <TextBox Text="{Binding StockPrice}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
-                    <TextBlock VerticalAlignment="Center" Width="20" FontSize="16" Margin="5 0 0 0">元</TextBlock>
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="35 0 0 0">定价：</TextBlock>
-                    <TextBox Text="{Binding Price}" IsReadOnly="True" Background="LightGray" Width="100" VerticalContentAlignment="Center"></TextBox>
-                    <TextBlock VerticalAlignment="Center" Width="20" FontSize="16" Margin="5 0 0 0">元</TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">最终售价：</TextBlock>
-                    <TextBox Text="{Binding SoldPirce}" IsReadOnly="True" Background="LightGray"
-                         Width="100" FontSize="20" Foreground="Red"
-                         VerticalContentAlignment="Center" HorizontalContentAlignment="Right"></TextBox>
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16" Margin="5 0 0 0">元</TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Height="30">
-                    <TextBlock VerticalAlignment="Center" Width="90" FontSize="16">销售时间：</TextBlock>
-                    <TextBox Text="{Binding ItemId, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" IsReadOnly="True" Background="LightGray" Width="250" VerticalContentAlignment="Center"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Command="{Binding SoldCommand}" FontSize="18" Width="120" FontWeight="Bold" Foreground="Red">确认退货</Button>
-                </StackPanel>
-            </Grid>
+
         </Grid>
     </Grid>
 </Window>

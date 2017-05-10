@@ -12,7 +12,7 @@ namespace MAC.MIOCO.ViewModel
 {
     public class ViewCustomerDetailViewModel : ViewModelBase
     {
-        public ViewCustomerDetailViewModel(Window window)
+        public ViewCustomerDetailViewModel(Window window, Customer customer)
         {
             CloseCommand = new DelegateCommand(() =>
             {
@@ -33,7 +33,7 @@ namespace MAC.MIOCO.ViewModel
             //    ItemSalesColletion = new ObservableCollection<ItemSales>(ITEMSALESSOURCE.Skip(ItemSalesPageIndex * PAGESIZE).Take(PAGESIZE));
             //}, () => { return (ItemSalesPageIndex + 1) * PAGESIZE < ITEMSALESSOURCE.Count() ? true : false; });
 
-            ITEMSALESSOURCE = new ObservableCollection<ItemSales>(SqlServerCompactService.GetItemSales());
+            ITEMSALESSOURCE = new ObservableCollection<ItemSales>(SqlServerCompactService.GetItemSales(customer.Id));
             ItemSalesColletion = new ObservableCollection<ItemSales>(ITEMSALESSOURCE.Skip(ItemSalesPageIndex * PAGESIZE).Take(PAGESIZE));
             SearchCommand = new DelegateCommand(() =>
             {
@@ -61,7 +61,7 @@ namespace MAC.MIOCO.ViewModel
             }, () => { return (ItemSalesPageIndex + 1) * PAGESIZE < ITEMSALESSOURCE.Where(t => t.ItemSalesId.IndexOf(SearchItemSalesId, StringComparison.OrdinalIgnoreCase) >= 0).Count() ? true : false; });
 
 
-            DEPOSITDETAILSOURCE = new ObservableCollection<DepositDetail>(SqlServerCompactService.GetData("DepositDetail").Cast<DepositDetail>().OrderByDescending(s => s.UpdateTime));
+            DEPOSITDETAILSOURCE = new ObservableCollection<DepositDetail>(SqlServerCompactService.GetDepositDetail(customer.Id));
             DepositDetailColletion = new ObservableCollection<DepositDetail>(DEPOSITDETAILSOURCE.Skip(DepositDetailPageIndex * PAGESIZE).Take(PAGESIZE));
             DepositDetailPreviousCommand = new DelegateCommand(() =>
             {

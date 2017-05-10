@@ -149,7 +149,7 @@ namespace MAC.MIOCO.ViewModel
             ViewCommand = new DelegateCommand<Customer>(s =>
             {
                 ViewCustomerDetailWindow w = new ViewCustomerDetailWindow();
-                ViewCustomerDetailViewModel model = new ViewCustomerDetailViewModel(w);
+                ViewCustomerDetailViewModel model = new ViewCustomerDetailViewModel(w, s);
                 w.DataContext = model;
                 w.Owner = App.Current.MainWindow;
                 w.ShowDialog();

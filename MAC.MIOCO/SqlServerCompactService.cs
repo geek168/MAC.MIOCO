@@ -429,7 +429,7 @@ namespace MAC.MIOCO
                     tx = conn.BeginTransaction();
 
                     //var ItemSalesId = Guid.NewGuid().ToString();
-                    var ItemSalesId = "MACMIOCO" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                    var ItemSalesId = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
                     list.ForEach(s =>
                     {
@@ -515,18 +515,30 @@ namespace MAC.MIOCO
             return ret;
         }
 
-        public static List<ItemSales> GetItemSales()
+        /// <summary>
+        /// GetItemSales
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        public static List<ItemSales> GetItemSales(string customerId)
         {
             List<ItemSales> list = new List<ItemSales>();
             var sql = @"SELECT ItemSalesId,ItemMasterId,M.ItemId,S.ItemName,CustomerId,SalesType
                               , SalesCount, SoldPirce, S.UpdateTime FROM ItemSales AS S
                            INNER JOIN ItemMaster AS M
-                        ON S.ItemMasterId = M.Id ORDER BY UpdateTime DESC";
+                        ON S.ItemMasterId = M.Id 
+                        WHERE CustomerId = @CustomerId
+                        ORDER BY UpdateTime DESC";
             DataTable dt = new DataTable();
             using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
             {
                 conn.Open();
                 SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = customerId }
+                };
+                command.Parameters.AddRange(parameters);
                 using (SqlCeDataReader dataReader = command.ExecuteReader())
                 {
                     dt.Load(dataReader);
@@ -542,6 +554,45 @@ namespace MAC.MIOCO
                 item.SalesType = int.Parse(dr["SalesType"].ToString());
                 item.SalesCount = int.Parse(dr["SalesCount"].ToString());
                 item.SoldPirce = decimal.Parse(dr["SoldPirce"].ToString());
+                list.Add(item);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        public static List<DepositDetail> GetDepositDetail(string customerId)
+        {
+            List<DepositDetail> list = new List<DepositDetail>();
+            var sql = @"SELECT CustomerId,Detail,ItemSalesId,UpdateTime FROM DepositDetail
+                        WHERE CustomerId = @CustomerId
+                        ORDER BY UpdateTime DESC";
+            DataTable dt = new DataTable();
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                var parameters = new[]
+                {
+                    new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = customerId }
+                };
+                command.Parameters.AddRange(parameters);
+                using (SqlCeDataReader dataReader = command.ExecuteReader())
+                {
+                    dt.Load(dataReader);
+                }
+                conn.Close();
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                var item = new DepositDetail();
+                item.CustomerId = dr["CustomerId"].ToString();
+                item.Detail = dr["Detail"].ToString();
+                item.ItemSalesId = dr["ItemSalesId"].ToString();
+                item.UpdateTime = DateTime.Parse(dr["UpdateTime"].ToString());
                 list.Add(item);
             }
             return list;
