@@ -559,6 +559,60 @@ namespace MAC.MIOCO
             return list;
         }
 
+        public static List<ItemSales> GetItemSales(DateTime time, int type)
+        {
+            List<ItemSales> list = new List<ItemSales>();
+            var sql = @"SELECT ItemSalesId,ItemMasterId,M.ItemId,S.ItemName,CustomerId,SalesType,ItemType,SalesCount,StockPrice,SoldPirce,S.UpdateTime FROM ItemSales AS S
+                        INNER JOIN ItemMaster AS M
+                        ON S.ItemMasterId = M.Id";
+            if(type == 0)
+            {
+                sql += " WHERE DATEPART(dd, S.UpdateTime) = '" + time.Day + "' AND DATEPART(m, S.UpdateTime) = '" + time.Month + "' AND DATEPART(yyyy, S.UpdateTime) = '" + time.Year + "'";
+            }
+            else if(type ==1)
+            {
+                sql += " WHERE DATEPART(m, S.UpdateTime) = '" + time.Month + "' AND DATEPART(yyyy, S.UpdateTime) = '" + time.Year + "'";
+            }
+            else
+            {
+                sql += " WHERE DATEPART(yyyy,S.UpdateTime) = '" + time.Year + "'";
+            }
+
+            sql += " ORDER BY UpdateTime DESC";
+
+            DataTable dt = new DataTable();
+            using (SqlCeConnection conn = new SqlCeConnection(SQLCONN))
+            {
+                conn.Open();
+                SqlCeCommand command = new SqlCeCommand(sql, conn);
+                //var parameters = new[]
+                //{
+                //    new SqlCeParameter("CustomerId", SqlDbType.NVarChar, 50) { Value = customerId }
+                //};
+                //command.Parameters.AddRange(parameters);
+                using (SqlCeDataReader dataReader = command.ExecuteReader())
+                {
+                    dt.Load(dataReader);
+                }
+                conn.Close();
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                var item = new ItemSales();
+                item.ItemSalesId = dr["ItemSalesId"].ToString();
+                item.ItemId = dr["ItemId"].ToString();
+                item.ItemName = dr["ItemName"].ToString();
+                item.ItemType = int.Parse(dr["ItemType"].ToString());
+                item.SalesType = int.Parse(dr["SalesType"].ToString());
+                item.SalesCount = int.Parse(dr["SalesCount"].ToString());
+                item.StockPrice = decimal.Parse(dr["StockPrice"].ToString());
+                item.SoldPirce = decimal.Parse(dr["SoldPirce"].ToString());
+                item.UpdateTime = DateTime.Parse(dr["UpdateTime"].ToString());
+                list.Add(item);
+            }
+            return list;
+        }
+
         /// <summary>
         /// 
         /// </summary>

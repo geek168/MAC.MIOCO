@@ -40,10 +40,10 @@
             </Button>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <Calendar VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 5 0 0"></Calendar>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按日统计</Button>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按月统计</Button>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按年统计</Button>
+            <Calendar SelectedDate="{Binding SelectedDate, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 5 0 0"></Calendar>
+            <Button Command="{Binding AnalyseCommand}" CommandParameter="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按日统计</Button>
+            <Button Command="{Binding AnalyseCommand}" CommandParameter="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按月统计</Button>
+            <Button Command="{Binding AnalyseCommand}" CommandParameter="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按年统计</Button>
             <StackPanel Margin="5 30 5 0">
                 <TextBlock FontSize="18">总计：</TextBlock>
                 <DockPanel Margin="0 5 0 0">
@@ -84,7 +84,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="销售类型" Width="80" IsReadOnly="True">
+                    <!--<DataGridTemplateColumn Header="销售类型" Width="80" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding SalesType, Converter={StaticResource salesTypeConverter}}" 
@@ -92,7 +92,7 @@
                                            HorizontalAlignment="Center"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTemplateColumn Header="款式" Width="55" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -105,7 +105,7 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="客户" Width="60" IsReadOnly="True">
+                    <!--<DataGridTemplateColumn Header="客户" Width="60" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding CustomerName}" HorizontalAlignment="Center"></TextBlock>
@@ -116,11 +116,23 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTemplateColumn Header="进货价格" Width="100" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding StockPrice}" HorizontalAlignment="Right"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="数量" Width="60" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SalesCount}" HorizontalAlignment="Center"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
@@ -146,7 +158,7 @@
                     <DataGridTemplateColumn Header="销售时间" Width="120" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding SoldTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" HorizontalAlignment="Center"></TextBlock>
+                                <TextBlock Text="{Binding UpdateTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" HorizontalAlignment="Center"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
