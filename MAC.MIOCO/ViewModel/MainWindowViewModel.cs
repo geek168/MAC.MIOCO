@@ -112,12 +112,12 @@ namespace MAC.MIOCO.ViewModel
                 LoginVisibility = Visibility.Collapsed;
                 LoginErrorVisibility = Visibility.Visible;
             }
-            else
-            {
-                File.Copy(file, backupfile, true);
-                LoginVisibility = Visibility.Visible;
-                LoginErrorVisibility = Visibility.Collapsed;
-            }
+            //else
+            //{
+            //    File.Copy(file, backupfile, true);
+            //    LoginVisibility = Visibility.Visible;
+            //    LoginErrorVisibility = Visibility.Collapsed;
+            //}
         }
 
 

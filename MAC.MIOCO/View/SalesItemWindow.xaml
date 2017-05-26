@@ -44,7 +44,7 @@
             <Button Command="{Binding AnalyseCommand}" CommandParameter="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按日统计</Button>
             <Button Command="{Binding AnalyseCommand}" CommandParameter="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按月统计</Button>
             <Button Command="{Binding AnalyseCommand}" CommandParameter="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="18" Margin="5 5 0 0">按年统计</Button>
-            <StackPanel Margin="5 30 5 0">
+            <!--<StackPanel Margin="5 30 5 0">
                 <TextBlock FontSize="18">总计：</TextBlock>
                 <DockPanel Margin="0 5 0 0">
                     <TextBlock DockPanel.Dock="Left" FontSize="14" Width="30">卖出</TextBlock>
@@ -58,7 +58,7 @@
                     <TextBlock Text="{Binding TotalProfit}"
                         FontSize="14" Foreground="Red" HorizontalAlignment="Right" Margin="0 0 5 0"></TextBlock>
                 </DockPanel>
-            </StackPanel>
+            </StackPanel>-->
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="5">

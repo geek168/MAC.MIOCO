@@ -46,6 +46,8 @@ namespace MAC.MIOCO.ViewModel
 
             AnalyseCommand = new DelegateCommand<string>(s =>
             {
+                ItemSalesColletion.Clear();
+
                 int t = 0;
                 switch (s)
                 {
@@ -65,11 +67,27 @@ namespace MAC.MIOCO.ViewModel
                 TotalProfit = SOURCE.Sum(k => k.SoldPirce - (k.SalesCount * k.StockPrice)).ToString();
                 ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
             });
+
+            PreviousCommand = new DelegateCommand(() =>
+            {
+                PageIndex--;
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return PageIndex > 0 ? true : false; });
+
+            NextCommand = new DelegateCommand(() =>
+            {
+                PageIndex++;
+                ItemSalesColletion = new ObservableCollection<ItemSales>(SOURCE.Skip(PageIndex * PAGESIZE).Take(PAGESIZE));
+            }, () => { return (PageIndex + 1) * PAGESIZE < SOURCE.Count() ? true : false; });
         }
 
         public DelegateCommand CloseCommand { get; private set; }
 
         public DelegateCommand<string> AnalyseCommand { get; private set; }
+
+        public DelegateCommand PreviousCommand { get; private set; }
+
+        public DelegateCommand NextCommand { get; private set; }
 
         private ObservableCollection<ItemSales> SOURCE = new ObservableCollection<ItemSales>();
 
